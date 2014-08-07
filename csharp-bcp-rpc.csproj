@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23F822E2-727D-4EDB-A2E4-01DB1C1BFBAF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>rpc</RootNamespace>
+    <AssemblyName>csharp-bcp-rpc</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ByteBufferInput.cs" />
+    <Compile Include="ByteBufferOutput.cs" />
+    <Compile Include="json-stream\Array.cs" />
+    <Compile Include="json-stream\com\dongxiguo\continuation\Continuation.cs" />
+    <Compile Include="json-stream\com\dongxiguo\continuation\utils\Generator.cs" />
+    <Compile Include="json-stream\com\qifun\hddl\optionalStm\Ref.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\GeneratedBuilderPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\LowPriorityDynamicBuilderPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\PrimitiveBuilderPlugins.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\RawBuilderPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\GeneratedDeserializerPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\LowPriorityDynamicDeserializerPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\PrimitiveDeserializerPlugins.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\RawDeserializerPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\io\BsonInput.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\io\BsonOutput.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\io\BsonReader.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\io\BsonWriter.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\io\PrettyTextPrinter.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\io\TextParser.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\JsonBuilder.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\JsonBuilderFactory.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\JsonDeserializer.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\JsonSerializer.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\JsonStream.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\RawJson.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\rpc\Future.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\rpc\IJsonService.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\rpc\IncomingProxy.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\rpc\IncomingProxyFactory.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\rpc\JsonHandler.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\rpc\OutgoingProxy.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\rpc\OutgoingProxyFactory.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\GeneratedSerializerPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\LowPriorityDynamicSerializerPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\PrimitiveSerializerPlugins.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\RawSerializerPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\unknown\UnknownEnumValue.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\unknown\UnknownFieldMap.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\unknown\UnknownType.cs" />
+    <Compile Include="json-stream\cs\Boot.cs" />
+    <Compile Include="json-stream\cs\internal\Exceptions.cs" />
+    <Compile Include="json-stream\cs\internal\FieldLookup.cs" />
+    <Compile Include="json-stream\cs\internal\Function.cs" />
+    <Compile Include="json-stream\cs\internal\HxObject.cs" />
+    <Compile Include="json-stream\cs\internal\Iterator.cs" />
+    <Compile Include="json-stream\cs\internal\Null.cs" />
+    <Compile Include="json-stream\cs\internal\Runtime.cs" />
+    <Compile Include="json-stream\cs\internal\StringExt.cs" />
+    <Compile Include="json-stream\cs\Lib.cs" />
+    <Compile Include="json-stream\Date.cs" />
+    <Compile Include="json-stream\haxe\crypto\Base64.cs" />
+    <Compile Include="json-stream\haxe\crypto\BaseCode.cs" />
+    <Compile Include="json-stream\haxe\ds\BalancedTree.cs" />
+    <Compile Include="json-stream\haxe\ds\EnumValueMap.cs" />
+    <Compile Include="json-stream\haxe\ds\GenericStack.cs" />
+    <Compile Include="json-stream\haxe\ds\HashMap.cs" />
+    <Compile Include="json-stream\haxe\ds\IntMap.cs" />
+    <Compile Include="json-stream\haxe\ds\ObjectMap.cs" />
+    <Compile Include="json-stream\haxe\ds\StringMap.cs" />
+    <Compile Include="json-stream\haxe\ds\Vector.cs" />
+    <Compile Include="json-stream\haxe\ds\WeakMap.cs" />
+    <Compile Include="json-stream\haxe\format\JsonParser.cs" />
+    <Compile Include="json-stream\haxe\format\JsonPrinter.cs" />
+    <Compile Include="json-stream\haxe\Int64.cs" />
+    <Compile Include="json-stream\haxe\io\Bytes.cs" />
+    <Compile Include="json-stream\haxe\io\BytesBuffer.cs" />
+    <Compile Include="json-stream\haxe\io\BytesInput.cs" />
+    <Compile Include="json-stream\haxe\io\BytesOutput.cs" />
+    <Compile Include="json-stream\haxe\io\Eof.cs" />
+    <Compile Include="json-stream\haxe\io\Error.cs" />
+    <Compile Include="json-stream\haxe\io\Input.cs" />
+    <Compile Include="json-stream\haxe\io\Output.cs" />
+    <Compile Include="json-stream\haxe\io\StringInput.cs" />
+    <Compile Include="json-stream\haxe\Json.cs" />
+    <Compile Include="json-stream\haxe\Log.cs" />
+    <Compile Include="json-stream\haxe\macro\ComplexTypeTools.cs" />
+    <Compile Include="json-stream\haxe\macro\Context.cs" />
+    <Compile Include="json-stream\haxe\macro\Expr.cs" />
+    <Compile Include="json-stream\haxe\macro\ExprTools.cs" />
+    <Compile Include="json-stream\haxe\macro\MacroStringTools.cs" />
+    <Compile Include="json-stream\haxe\macro\Printer.cs" />
+    <Compile Include="json-stream\haxe\macro\Type.cs" />
+    <Compile Include="json-stream\haxe\macro\TypeTools.cs" />
+    <Compile Include="json-stream\IntIterator.cs" />
+    <Compile Include="json-stream\Lambda.cs" />
+    <Compile Include="json-stream\List.cs" />
+    <Compile Include="json-stream\Map.cs" />
+    <Compile Include="json-stream\Math.cs" />
+    <Compile Include="json-stream\Reflect.cs" />
+    <Compile Include="json-stream\Std.cs" />
+    <Compile Include="json-stream\StringBuf.cs" />
+    <Compile Include="json-stream\StringTools.cs" />
+    <Compile Include="json-stream\Type.cs" />
+    <Compile Include="JsonStreamExtractor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RpcDelegate.cs" />
+    <Compile Include="RpcException.cs" />
+    <Compile Include="RpcSession.cs" />
+    <Compile Include="TextSession.cs" />
+    <Compile Include="WrappedHaxeIterator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\csharp-bcp\csharp-bcp.csproj">
+      <Project>{fbc8c692-fa6b-46af-93de-9ce1bedbe1db}</Project>
+      <Name>csharp-bcp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
