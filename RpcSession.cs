@@ -180,131 +180,91 @@ namespace Rpc
         protected override void Received(IList<ArraySegment<byte>> buffers)
         {
             var jsonStream = ToJsonStream(buffers);
-            var requestOrResponsePairs = JsonStreamExtractor.Object(jsonStream);
-            if (requestOrResponsePairs.hasValue)
+            var requestOrResponsePairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(jsonStream);
+            while (requestOrResponsePairs.HasNext())
             {
-                var requestOrResponsePairsIterator = requestOrResponsePairs.value;
-                while (requestOrResponsePairsIterator.hasNext())
+                var requestOrResponsePair = (JsonStreamPair)requestOrResponsePairs.Next();
+                if (requestOrResponsePair.key.Equals("request"))
                 {
-                    var requestOrResponsePair = (JsonStreamPair)requestOrResponsePairsIterator.next();
-                    if (requestOrResponsePair.key.Equals("request"))
+                    var idPaires = IWrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
+                    while (idPaires.HasNext())
                     {
-                        var idPaires = JsonStreamExtractor.Object(requestOrResponsePair.value);
-                        if (idPaires.hasValue)
+                        var idPair = (JsonStreamPair)idPaires.Next();
+                        var id = idPair.key;
+                        var servicePairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(idPair.value);
+                        while (servicePairs.HasNext())
                         {
-                            var idPariesIterator = idPaires.value;
-                            while (idPariesIterator.hasNext())
+                            var servicePair = (JsonStreamPair)servicePairs.Next();
+                            RpcDelegate.IncomingProxyCallback<RpcSession> incomingRpc;
+                            if (incomingServices().incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
                             {
-                                var idPair = (JsonStreamPair)idPariesIterator.next();
-                                var id = idPair.key;
-                                var servicePairs = JsonStreamExtractor.Object(idPair.value);
-                                if (servicePairs.hasValue)
-                                {
-                                    var servicePairsIterator = servicePairs.value;
-                                    while (servicePairsIterator.hasNext())
-                                    {
-                                        var servicePair = (JsonStreamPair)servicePairsIterator.next();
-                                        RpcDelegate.IncomingProxyCallback<RpcSession> incomingRpc;
-                                        if (incomingServices().incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
-                                        {
-                                            incomingRpc(this).apply(servicePair.value, new JsonResponseHandler(this, id));
-                                        }
-                                        else
-                                        {
-                                            throw new UnknowServiceName();
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    throw new IllegalRpcData();
-                                }
+                                incomingRpc(this).apply(servicePair.value, new JsonResponseHandler(this, id));
+                            }
+                            else
+                            {
+                                throw new UnknowServiceName();
                             }
                         }
-                        else
-                        {
-                            throw new IllegalRpcData();
-                        }
-                    }
-                    else if(requestOrResponsePair.key.Equals("failure"))
-                    {
-                        var idPairs = JsonStreamExtractor.Object(requestOrResponsePair.value);
-                        if (idPairs.hasValue)
-                        {
-                            var idPairsIterator = idPairs.value;
-                            while (idPairsIterator.hasNext())
-                            {
-                                var idPair = (JsonStreamPair)idPairsIterator.next();
-                                int id;
-                                try
-                                {
-                                    id = Convert.ToInt32(idPair.key);
-                                }
-                                catch(Exception e)
-                                {
-                                    throw new IllegalRpcData("", e);
-                                }
-                                IJsonResponseHandler handler;
-                                if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
-                                {
-                                    outgoingRpcResponseHandlers.Remove(id);
-                                    handler.onFailure(idPair.value);
-                                }
-                                else
-                                {
-                                    throw new IllegalRpcData();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new IllegalRpcData();
-                        }
-                    }
-                    else if (requestOrResponsePair.key.Equals("success"))
-                    {
-                        var idPairs = JsonStreamExtractor.Object(requestOrResponsePair.value);
-                        if (idPairs.hasValue)
-                        {
-                            var idPairsIterator = idPairs.value;
-                            while (idPairsIterator.hasNext())
-                            {
-                                var idPair = (JsonStreamPair)idPairsIterator.next();
-                                int id;
-                                try
-                                {
-                                    id = Convert.ToInt32(idPair.key);
-                                }
-                                catch (Exception e)
-                                {
-                                    throw new IllegalRpcData("", e);
-                                }
-                                IJsonResponseHandler handler;
-                                if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
-                                {
-                                    outgoingRpcResponseHandlers.Remove(id);
-                                    handler.onSuccess(idPair.value);
-                                }
-                                else
-                                {
-                                    throw new IllegalRpcData();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new IllegalRpcData();
-                        }
-                    }
-                    else
-                    {
-                        throw new IllegalRpcData();
                     }
                 }
-            }
-            else
-            {
-                throw new IllegalRpcData();
+                else if (requestOrResponsePair.key.Equals("failure"))
+                {
+                    var idPairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
+                    while (idPairs.HasNext())
+                    {
+                        var idPair = (JsonStreamPair)idPairs.Next();
+                        int id;
+                        try
+                        {
+                            id = Convert.ToInt32(idPair.key);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new IllegalRpcData("", e);
+                        }
+                        IJsonResponseHandler handler;
+                        if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
+                        {
+                            outgoingRpcResponseHandlers.Remove(id);
+                            handler.onFailure(idPair.value);
+                        }
+                        else
+                        {
+                            throw new IllegalRpcData();
+                        }
+                    }
+                }
+                else if (requestOrResponsePair.key.Equals("success"))
+                {
+                    var idPairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
+                    while (idPairs.HasNext())
+                    {
+                        var idPair = (JsonStreamPair)idPairs.Next();
+                        int id;
+                        try
+                        {
+                            id = Convert.ToInt32(idPair.key);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new IllegalRpcData("", e);
+                        }
+                        IJsonResponseHandler handler;
+                        if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
+                        {
+                            outgoingRpcResponseHandlers.Remove(id);
+                            handler.onSuccess(idPair.value);
+                        }
+                        else
+                        {
+                            throw new IllegalRpcData();
+                        }
+                    }
+                }
+                else
+                {
+                    throw new IllegalRpcData();
+                }
             }
         }
     }

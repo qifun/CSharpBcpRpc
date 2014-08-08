@@ -39,8 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteBufferInput.cs" />
-    <Compile Include="ByteBufferOutput.cs" />
+    <Compile Include="ArraySegmentInput.cs" />
+    <Compile Include="ArraySegmentOutput.cs" />
     <Compile Include="json-stream\Array.cs" />
     <Compile Include="json-stream\com\dongxiguo\continuation\Continuation.cs" />
     <Compile Include="json-stream\com\dongxiguo\continuation\utils\Generator.cs" />
@@ -133,13 +133,12 @@
     <Compile Include="json-stream\StringBuf.cs" />
     <Compile Include="json-stream\StringTools.cs" />
     <Compile Include="json-stream\Type.cs" />
-    <Compile Include="JsonStreamExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RpcDelegate.cs" />
     <Compile Include="RpcException.cs" />
     <Compile Include="RpcSession.cs" />
     <Compile Include="TextSession.cs" />
-    <Compile Include="WrappedHaxeIterator.cs" />
+    <Compile Include="IWrappedHaxeIterator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\csharp-bcp\csharp-bcp.csproj">
