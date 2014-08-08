@@ -7,12 +7,12 @@ using haxe.lang;
 
 namespace Rpc
 {
-    internal class ByteBufferInput : Input
+    internal class ArraySegmentInput : Input
     {
         private IEnumerator<ArraySegment<Byte>> buffers;
         private ArraySegment<Byte> current = new ArraySegment<byte>();
 
-        public ByteBufferInput(IList<ArraySegment<Byte>> buffers)
+        public ArraySegmentInput(IList<ArraySegment<Byte>> buffers)
         {
             this.buffers = buffers.GetEnumerator();
             if (buffers.Count != 0)

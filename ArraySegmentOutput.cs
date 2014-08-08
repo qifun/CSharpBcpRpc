@@ -7,7 +7,7 @@ using haxe.lang;
 
 namespace Rpc
 {
-    internal class ByteBufferOutput : Output
+    internal class ArraySegmentOutput : Output
     {
         private static int PageSize = 128;
 
