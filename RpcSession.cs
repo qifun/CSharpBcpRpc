@@ -7,7 +7,7 @@ using haxe.lang;
 using com.qifun.jsonStream;
 using com.qifun.jsonStream.rpc;
 
-namespace rpc
+namespace Rpc
 {
     public abstract class RpcSession : Bcp.BcpSession
     {

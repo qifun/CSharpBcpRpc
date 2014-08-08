@@ -5,7 +5,7 @@ using System.Text;
 using haxe.io;
 using haxe.lang;
 
-namespace rpc
+namespace Rpc
 {
     internal class ByteBufferInput : Input
     {

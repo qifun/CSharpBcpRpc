@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using com.qifun.jsonStream.rpc;
 
-namespace rpc
+namespace Rpc
 {
     public class RpcDelegate
     {

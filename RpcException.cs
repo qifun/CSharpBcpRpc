@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace rpc
+namespace Rpc
 {
     public abstract class RpcException : Exception
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{23F822E2-727D-4EDB-A2E4-01DB1C1BFBAF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>rpc</RootNamespace>
+    <RootNamespace>Rpc</RootNamespace>
     <AssemblyName>csharp-bcp-rpc</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

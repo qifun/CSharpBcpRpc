@@ -5,7 +5,7 @@ using System.Text;
 using haxe.lang;
 using com.qifun.jsonStream.io;
 
-namespace rpc
+namespace Rpc
 {
     public abstract class TextSession : RpcSession
     {

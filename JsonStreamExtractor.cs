@@ -5,7 +5,7 @@ using System.Text;
 using com.qifun.jsonStream;
 using haxe.lang;
 
-namespace rpc
+namespace Rpc
 {
     internal class JsonStreamExtractor
     {
