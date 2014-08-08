@@ -8,17 +8,9 @@ namespace Rpc
 {
     public abstract class RpcException : Exception
     {
-        public RpcException(string message, Exception cause)
+        public RpcException(string message, Exception cause) : base(message, cause)
         {
-            this.message = message;
-            this.cause = cause;
         }
-
-        private string message = null;
-        private Exception cause = null;
-
-        new public string Message { get; set; }
-        public Exception Cause { get; set; }
     }
 
     public class IllegalRpcData : RpcException
