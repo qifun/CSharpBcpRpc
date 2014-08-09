@@ -180,18 +180,18 @@ namespace BcpRpc
         protected override void Received(IList<ArraySegment<byte>> buffers)
         {
             var jsonStream = ToJsonStream(buffers);
-            var requestOrResponsePairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(jsonStream);
+            var requestOrResponsePairs = WrappedHaxeIterator<JsonStreamPair>.Wrap(jsonStream);
             while (requestOrResponsePairs.HasNext())
             {
                 var requestOrResponsePair = (JsonStreamPair)requestOrResponsePairs.Next();
                 if (requestOrResponsePair.key.Equals("request"))
                 {
-                    var idPaires = IWrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
+                    var idPaires = WrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
                     while (idPaires.HasNext())
                     {
                         var idPair = (JsonStreamPair)idPaires.Next();
                         var id = idPair.key;
-                        var servicePairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(idPair.value);
+                        var servicePairs = WrappedHaxeIterator<JsonStreamPair>.Wrap(idPair.value);
                         while (servicePairs.HasNext())
                         {
                             var servicePair = (JsonStreamPair)servicePairs.Next();
@@ -209,7 +209,7 @@ namespace BcpRpc
                 }
                 else if (requestOrResponsePair.key.Equals("failure"))
                 {
-                    var idPairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
+                    var idPairs = WrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
                     while (idPairs.HasNext())
                     {
                         var idPair = (JsonStreamPair)idPairs.Next();
@@ -236,7 +236,7 @@ namespace BcpRpc
                 }
                 else if (requestOrResponsePair.key.Equals("success"))
                 {
-                    var idPairs = IWrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
+                    var idPairs = WrappedHaxeIterator<JsonStreamPair>.Wrap(requestOrResponsePair.value);
                     while (idPairs.HasNext())
                     {
                         var idPair = (JsonStreamPair)idPairs.Next();
