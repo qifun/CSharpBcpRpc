@@ -6,21 +6,21 @@ using System.Text;
 
 namespace BcpRpc
 {
-    class WrappedHaxeIterator<Element>
+    static class WrappedHaxeIterator
     {
-        public static IWrappedHaxeIterator<Element> Wrap(Object haxeIterator)
+        public static IWrappedHaxeIterator<Element> Wrap<Element>(Object haxeIterator)
         {
             if (haxeIterator is Generator)
             {
-                return new WrappedHaxeGenerator((Generator<Element>)haxeIterator);
+                return new WrappedHaxeGenerator<Element>((Generator<Element>)haxeIterator);
             }
             else
             {
-                return new WrappedReflectiveIteraor((Element)haxeIterator);
+                return new WrappedReflectiveIteraor<Element>((Element)haxeIterator);
             }
         }
 
-        private sealed class WrappedHaxeGenerator : IWrappedHaxeIterator<Element>
+        private sealed class WrappedHaxeGenerator<Element> : IWrappedHaxeIterator<Element>
         {
             private Generator<Element> haxeGenerator;
 
@@ -40,7 +40,7 @@ namespace BcpRpc
             }
         }
 
-        private sealed class WrappedReflectiveIteraor : IWrappedHaxeIterator<Element>
+        private sealed class WrappedReflectiveIteraor<Element> : IWrappedHaxeIterator<Element>
         {
             private object haxeIterator;
 
