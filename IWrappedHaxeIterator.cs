@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using com.dongxiguo.continuation.utils;
 using haxe.lang;
 
-namespace Rpc
+namespace BcpRpc
 {
     interface IWrappedHaxeIterator<Element>
     {

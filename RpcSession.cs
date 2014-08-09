@@ -8,7 +8,7 @@ using com.qifun.jsonStream;
 using com.qifun.jsonStream.rpc;
 using System.Diagnostics;
 
-namespace Rpc
+namespace BcpRpc
 {
     public abstract class RpcSession : Bcp.BcpClient
     {
