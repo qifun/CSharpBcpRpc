@@ -59,7 +59,7 @@ namespace BcpRpc
             {
                 foreach (var entry in incomingEntries)
                 {
-                    incomingProxyMap.Add(entry.serviceType.ToString(), incomingRpc(entry));
+                    incomingProxyMap.Add(entry.serviceType.ToString(), IncomingRpc(entry));
                 }
             }
 
@@ -73,7 +73,7 @@ namespace BcpRpc
                 };
             }
 
-            private RpcDelegate.IncomingProxyCallback<Session> incomingRpc<Service>(IncomingProxyEntry<Session, Service> entry)
+            private RpcDelegate.IncomingProxyCallback<Session> IncomingRpc<Service>(IncomingProxyEntry<Session, Service> entry)
             {
                 return incomingRpc(entry.rpcFactory, entry.incomingView);
             }
@@ -102,7 +102,7 @@ namespace BcpRpc
             return new Generator<Element>(new GeneratorFunction<Element>(2, 0, element));
         }
 
-        protected abstract IncomingProxyRegistration<RpcSession> incomingServices();
+        protected abstract IncomingProxyRegistration<RpcSession> IncomingServices();
         private int nextRequestId = 0;
         private Dictionary<int, IJsonResponseHandler> outgoingRpcResponseHandlers = new Dictionary<int, IJsonResponseHandler>();
 
@@ -208,7 +208,7 @@ namespace BcpRpc
                                 {
                                     var servicePair = (JsonStreamPair)servicePairs.Next();
                                     RpcDelegate.IncomingProxyCallback<RpcSession> incomingRpc;
-                                    if (incomingServices().incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
+                                    if (IncomingServices().incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
                                     {
                                         incomingRpc(this).apply(servicePair.value, new JsonResponseHandler(this, id));
                                     }
