@@ -9,6 +9,11 @@ namespace BcpRpc
 {
     public abstract class TextSession : RpcSession
     {
+        public TextSession(Bcp.BcpSession bcpSession)
+            : base(bcpSession)
+        {
+        }
+
         protected override IList<ArraySegment<byte>> ToByteBuffer(com.qifun.jsonStream.JsonStream js)
         {
             var output = new ArraySegmentOutput();

@@ -7,11 +7,20 @@ using haxe.lang;
 using com.qifun.jsonStream;
 using com.qifun.jsonStream.rpc;
 using System.Diagnostics;
+using Bcp;
 
 namespace BcpRpc
 {
-    public abstract class RpcSession : Bcp.BcpClient
+    public abstract class RpcSession
     {
+
+        public RpcSession(Bcp.BcpSession bcpSession)
+        {
+            bcpSession.Received += OnReceived;
+            this.bcpSession = bcpSession;
+        }
+        private Bcp.BcpSession bcpSession;
+
         public class OutgoingProxyEntry<Service>
         {
             internal Type serviceType;
@@ -123,7 +132,7 @@ namespace BcpRpc
                     JsonStream.OBJECT(generator1(new JsonStreamPair(
                         requestId.ToString(),
                         JsonStream.OBJECT(generator1(new JsonStreamPair(serviceClassName, request)))))))));
-                rpcSession.Send(rpcSession.ToByteBuffer(request));
+                rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(request));
             }
         }
 
@@ -163,7 +172,7 @@ namespace BcpRpc
                     JsonStream.OBJECT(generator1(new JsonStreamPair(
                         id,
                         responseBody))))));
-                rpcSession.Send(rpcSession.ToByteBuffer(responseStream));
+                rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(responseStream));
             }
 
             public void onFailure(JsonStream errorBody)
@@ -173,12 +182,13 @@ namespace BcpRpc
                     JsonStream.OBJECT(generator1(new JsonStreamPair(
                         id,
                         errorBody))))));
-                rpcSession.Send(rpcSession.ToByteBuffer(responseStream));
+                rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(responseStream));
             }
         }
 
-        protected override void Received(IList<ArraySegment<byte>> buffers)
+        private void OnReceived(object sender, BcpSession.ReceivedEventArgs e)
         {
+            IList<ArraySegment<byte>> buffers = e.Buffers;
             var jsonStream = ToJsonStream(buffers);
             var requestOrResponsePairs = WrappedHaxeIterator.Wrap<JsonStreamPair>(jsonStream);
             while (requestOrResponsePairs.HasNext())
@@ -221,9 +231,9 @@ namespace BcpRpc
                                 {
                                     id = Convert.ToInt32(idPair.key);
                                 }
-                                catch (Exception e)
+                                catch (Exception exception)
                                 {
-                                    throw new IllegalRpcData("", e);
+                                    throw new IllegalRpcData("", exception);
                                 }
                                 IJsonResponseHandler handler;
                                 if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
@@ -249,9 +259,9 @@ namespace BcpRpc
                                 {
                                     id = Convert.ToInt32(idPair.key);
                                 }
-                                catch (Exception e)
+                                catch (Exception exception)
                                 {
-                                    throw new IllegalRpcData("", e);
+                                    throw new IllegalRpcData("", exception);
                                 }
                                 IJsonResponseHandler handler;
                                 if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
