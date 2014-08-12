@@ -34,7 +34,7 @@ namespace BcpRpc
             }
         }
 
-        private interface IIncomingProxyEntry<Session>
+        public interface IIncomingProxyEntry<Session>
         {
 
             internal string Name { get; }

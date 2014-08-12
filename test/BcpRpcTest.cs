@@ -65,12 +65,13 @@ namespace test
                 this.rpcSession = rpcSession;
             }
 
-            public com.qifun.jsonStream.rpc._Future.IFuture<object> sendSheet1(com.qifun.qforce.serverDemo1.xlsx.Sheet1 request)
+
+            public IFuture<object> sendSheet1(com.qifun.qforce.serverDemo1.xlsx.Sheet1 request)
             {
                 throw new NotImplementedException();
             }
 
-            public com.qifun.jsonStream.rpc._Future.IFuture<object> ping(Ping request)
+            public IFuture<object> ping(Ping request)
             {
                 throw new NotImplementedException();
             }
@@ -115,9 +116,9 @@ namespace test
 
                 protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices()
                 {
-                    return new IncomingProxyRegistration<PingPongRpcSession>(new System.Collections.Generic.List<IncomingProxyEntry<PingPongRpcSession, Object>> {
-                        new IncomingProxyEntry<PingPongRpcSession, PingPongImpl>(
-                            delegate(PingPongRpcSession rpcSession) { return pingPongImpl; },
+                    return new IncomingProxyRegistration<RpcSession>(new System.Collections.Generic.List<IIncomingProxyEntry<RpcSession>> {
+                        new IncomingProxyEntry<RpcSession, PingPongImpl>(
+                            delegate(RpcSession rpcSession) { return pingPongImpl; },
                             typeof(IPingPong),
                             com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong),
                     });
