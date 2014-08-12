@@ -34,7 +34,16 @@ namespace BcpRpc
             }
         }
 
-        public class IncomingProxyEntry<Session, Service>
+        private interface IIncomingProxyEntry<Session>
+        {
+
+            internal string Name { get; }
+            
+            internal IJsonService NewJsonService(Session session);
+
+        }
+
+        public class IncomingProxyEntry<Session, Service> : IIncomingProxyEntry<Session>
         {
             internal readonly RpcDelegate.RpcFactoryCallback<Session, Service> rpcFactory;
             internal readonly System.Type serviceType;
@@ -49,6 +58,17 @@ namespace BcpRpc
                 this.serviceType = serviceType;
                 this.incomingView = incomingView;
             }
+
+            string IIncomingProxyEntry<Session>.Name
+            {
+                get { return serviceType.ToString(); }
+            }
+
+            IJsonService IIncomingProxyEntry<Session>.NewJsonService(Session session)
+            {
+                return incomingView(rpcFactory(session));
+            }
+
         }
 
         public class IncomingProxyRegistration<Session>
@@ -56,28 +76,14 @@ namespace BcpRpc
             internal Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>> incomingProxyMap =
                 new Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>>();
 
-            public IncomingProxyRegistration(IList<IncomingProxyEntry<Session, Object>> incomingEntries)
+            public IncomingProxyRegistration(IList<IIncomingProxyEntry<Session>> incomingEntries)
             {
                 foreach (var entry in incomingEntries)
                 {
-                    incomingProxyMap.Add(entry.serviceType.ToString(), IncomingRpc(entry));
+                    incomingProxyMap.Add(entry.Name, entry.NewJsonService);
                 }
             }
 
-            private RpcDelegate.IncomingProxyCallback<Session> IncomingRpc<Service>(
-                RpcDelegate.RpcFactoryCallback<Session, Service> rpcFactory,
-                RpcDelegate.IncomingViewCallback<Service> incomingView)
-            {
-                return delegate(Session session)
-                {
-                    return incomingView(rpcFactory(session));
-                };
-            }
-
-            private RpcDelegate.IncomingProxyCallback<Session> IncomingRpc<Service>(IncomingProxyEntry<Session, Service> entry)
-            {
-                return IncomingRpc(entry.rpcFactory, entry.incomingView);
-            }
         }
 
         internal class GeneratorFunction<Element> : Function
