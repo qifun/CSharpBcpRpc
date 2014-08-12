@@ -8,6 +8,7 @@ using com.qifun.jsonStream;
 using com.qifun.jsonStream.rpc;
 using System.Diagnostics;
 using Bcp;
+using System.Threading;
 
 namespace BcpRpc
 {
@@ -103,30 +104,40 @@ namespace BcpRpc
         }
 
         protected abstract IncomingProxyRegistration<RpcSession> IncomingServices();
-        private int nextRequestId = 0;
+        private int nextRequestId = -1;
         private Dictionary<int, IJsonResponseHandler> outgoingRpcResponseHandlers = new Dictionary<int, IJsonResponseHandler>();
+        private object outgoingRpcResponseHandlerLock = new Object();
 
         protected abstract IList<ArraySegment<Byte>> ToByteBuffer(JsonStream js);
 
         protected abstract JsonStream ToJsonStream(IList<ArraySegment<Byte>> buffers);
 
-        internal Object rpcSessionLock = new Object();
-
         private class JsonService : IJsonService
         {
-            private int requestId;
             private string serviceClassName;
             private RpcSession rpcSession;
 
-            public JsonService(RpcSession rpcSession, int requestId, string serviceClassName)
+            public JsonService(RpcSession rpcSession, string serviceClassName)
             {
-                this.requestId = requestId;
                 this.serviceClassName = serviceClassName;
                 this.rpcSession = rpcSession;
             }
 
             public void apply(JsonStream request, IJsonResponseHandler handler)
             {
+                int requestId = Interlocked.Increment(ref rpcSession.nextRequestId);
+                IJsonResponseHandler oldHandler;
+                lock (rpcSession.outgoingRpcResponseHandlerLock)
+                {
+                    if (rpcSession.outgoingRpcResponseHandlers.TryGetValue(requestId, out oldHandler))
+                    {
+                        throw new Exception("Illegal state!");
+                    }
+                    else
+                    {
+                        rpcSession.outgoingRpcResponseHandlers.Add(requestId, handler);
+                    }
+                }
                 var requestStream = JsonStream.OBJECT(generator1(new JsonStreamPair(
                     "request",
                     JsonStream.OBJECT(generator1(new JsonStreamPair(
@@ -139,19 +150,7 @@ namespace BcpRpc
         public ServiceInterface OutgoingService<ServiceInterface>(OutgoingProxyEntry<ServiceInterface> entry)
         {
             var serviceClassName = entry.serviceType.ToString();
-            lock (rpcSessionLock)
-            {
-                int requestId = nextRequestId;
-                nextRequestId += 1;
-                if (!outgoingRpcResponseHandlers.ContainsKey(requestId))
-                {
-                    return entry.outgoingView(new JsonService(this, requestId, serviceClassName));
-                }
-                else
-                {
-                    throw new Exception("Illegal state!");
-                }
-            }
+            return entry.outgoingView(new JsonService(this, serviceClassName));
         }
 
         public class JsonResponseHandler : IJsonResponseHandler
@@ -236,15 +235,18 @@ namespace BcpRpc
                                     throw new IllegalRpcData("", exception);
                                 }
                                 IJsonResponseHandler handler;
-                                if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
+                                lock (outgoingRpcResponseHandlerLock)
                                 {
-                                    outgoingRpcResponseHandlers.Remove(id);
-                                    handler.onFailure(idPair.value);
+                                    if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
+                                    {
+                                        outgoingRpcResponseHandlers.Remove(id);
+                                    }
+                                    else
+                                    {
+                                        throw new IllegalRpcData();
+                                    }
                                 }
-                                else
-                                {
-                                    throw new IllegalRpcData();
-                                }
+                                handler.onFailure(idPair.value);
                             }
                         }
                         break;
@@ -264,15 +266,18 @@ namespace BcpRpc
                                     throw new IllegalRpcData("", exception);
                                 }
                                 IJsonResponseHandler handler;
-                                if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
+                                lock (outgoingRpcResponseHandlerLock)
                                 {
-                                    outgoingRpcResponseHandlers.Remove(id);
-                                    handler.onSuccess(idPair.value);
+                                    if (outgoingRpcResponseHandlers.TryGetValue(id, out handler))
+                                    {
+                                        outgoingRpcResponseHandlers.Remove(id);
+                                    }
+                                    else
+                                    {
+                                        throw new IllegalRpcData();
+                                    }
                                 }
-                                else
-                                {
-                                    throw new IllegalRpcData();
-                                }
+                                handler.onSuccess(idPair.value);
                             }
                         }
                         break;
