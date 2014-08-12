@@ -64,7 +64,7 @@ namespace BcpRpc
                 }
             }
 
-            private RpcDelegate.IncomingProxyCallback<Session> incomingRpc<Service>(
+            private RpcDelegate.IncomingProxyCallback<Session> IncomingRpc<Service>(
                 RpcDelegate.RpcFactoryCallback<Session, Service> rpcFactory,
                 RpcDelegate.IncomingViewCallback<Service> incomingView)
             {
@@ -76,7 +76,7 @@ namespace BcpRpc
 
             private RpcDelegate.IncomingProxyCallback<Session> IncomingRpc<Service>(IncomingProxyEntry<Session, Service> entry)
             {
-                return incomingRpc(entry.rpcFactory, entry.incomingView);
+                return IncomingRpc(entry.rpcFactory, entry.incomingView);
             }
         }
 
