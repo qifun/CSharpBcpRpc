@@ -24,10 +24,10 @@ namespace BcpRpc
 
         public class OutgoingProxyEntry<Service>
         {
-            internal readonly Type serviceType;
+            internal readonly System.Type serviceType;
             internal readonly RpcDelegate.OutgoingCallback<Service> outgoingView;
 
-            public OutgoingProxyEntry(Type serviceType, RpcDelegate.OutgoingCallback<Service> outgoingView)
+            public OutgoingProxyEntry(System.Type serviceType, RpcDelegate.OutgoingCallback<Service> outgoingView)
             {
                 this.serviceType = serviceType;
                 this.outgoingView = outgoingView;
@@ -37,12 +37,12 @@ namespace BcpRpc
         public class IncomingProxyEntry<Session, Service>
         {
             internal readonly RpcDelegate.RpcFactoryCallback<Session, Service> rpcFactory;
-            internal readonly Type serviceType;
+            internal readonly System.Type serviceType;
             internal readonly RpcDelegate.IncomingViewCallback<Service> incomingView;
 
             public IncomingProxyEntry(
                 RpcDelegate.RpcFactoryCallback<Session, Service> rpcFactory,
-                Type serviceType,
+                System.Type serviceType,
                 RpcDelegate.IncomingViewCallback<Service> incomingView)
             {
                 this.rpcFactory = rpcFactory;
