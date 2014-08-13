@@ -104,7 +104,7 @@ namespace BcpRpc
             }
         }
 
-        private static Generator<Element> generator1<Element>(Element element)
+        private static Generator<Element> Generator1<Element>(Element element)
         {
             return new Generator<Element>(new GeneratorFunction<Element>(2, 0, element));
         }
@@ -144,11 +144,11 @@ namespace BcpRpc
                         rpcSession.outgoingRpcResponseHandlers.Add(requestId, handler);
                     }
                 }
-                var requestStream = JsonStream.OBJECT(generator1(new JsonStreamPair(
+                var requestStream = JsonStream.OBJECT(Generator1(new JsonStreamPair(
                     "request",
-                    JsonStream.OBJECT(generator1(new JsonStreamPair(
+                    JsonStream.OBJECT(Generator1(new JsonStreamPair(
                         requestId.ToString(),
-                        JsonStream.OBJECT(generator1(new JsonStreamPair(serviceClassName, request)))))))));
+                        JsonStream.OBJECT(Generator1(new JsonStreamPair(serviceClassName, request)))))))));
                 rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(request));
             }
         }
@@ -172,9 +172,9 @@ namespace BcpRpc
 
             public void onSuccess(JsonStream responseBody)
             {
-                var responseStream = JsonStream.OBJECT(generator1(new JsonStreamPair(
+                var responseStream = JsonStream.OBJECT(Generator1(new JsonStreamPair(
                     "success",
-                    JsonStream.OBJECT(generator1(new JsonStreamPair(
+                    JsonStream.OBJECT(Generator1(new JsonStreamPair(
                         id,
                         responseBody))))));
                 rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(responseStream));
@@ -182,9 +182,9 @@ namespace BcpRpc
 
             public void onFailure(JsonStream errorBody)
             {
-                var responseStream = JsonStream.OBJECT(generator1(new JsonStreamPair(
+                var responseStream = JsonStream.OBJECT(Generator1(new JsonStreamPair(
                     "failure",
-                    JsonStream.OBJECT(generator1(new JsonStreamPair(
+                    JsonStream.OBJECT(Generator1(new JsonStreamPair(
                         id,
                         errorBody))))));
                 rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(responseStream));
