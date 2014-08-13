@@ -49,6 +49,10 @@
     <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\LowPriorityDynamicBuilderPlugin.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\PrimitiveBuilderPlugins.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\RawBuilderPlugin.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\ArrayList.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Map.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Set.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\CSharpDeserializerPlugins.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\GeneratedDeserializerPlugin.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\LowPriorityDynamicDeserializerPlugin.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\PrimitiveDeserializerPlugins.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="json-stream\com\qifun\jsonStream\rpc\JsonHandler.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\rpc\OutgoingProxy.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\rpc\OutgoingProxyFactory.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\CSharpSerializerPlugins.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\GeneratedSerializerPlugin.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\LowPriorityDynamicSerializerPlugin.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\PrimitiveSerializerPlugins.cs" />
@@ -90,6 +95,7 @@
     <Compile Include="json-stream\cs\internal\StringExt.cs" />
     <Compile Include="json-stream\cs\Lib.cs" />
     <Compile Include="json-stream\Date.cs" />
+    <Compile Include="json-stream\dotnet\system\NativeEvent.cs" />
     <Compile Include="json-stream\haxe\crypto\Base64.cs" />
     <Compile Include="json-stream\haxe\crypto\BaseCode.cs" />
     <Compile Include="json-stream\haxe\ds\BalancedTree.cs" />
@@ -114,7 +120,6 @@
     <Compile Include="json-stream\haxe\io\Output.cs" />
     <Compile Include="json-stream\haxe\io\StringInput.cs" />
     <Compile Include="json-stream\haxe\Json.cs" />
-    <Compile Include="json-stream\haxe\Log.cs" />
     <Compile Include="json-stream\haxe\macro\ComplexTypeTools.cs" />
     <Compile Include="json-stream\haxe\macro\Context.cs" />
     <Compile Include="json-stream\haxe\macro\Expr.cs" />

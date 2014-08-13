@@ -37,9 +37,9 @@ namespace BcpRpc
         public interface IIncomingProxyEntry<Session>
         {
 
-            internal string Name { get; }
+            string Name { get; }
             
-            internal IJsonService NewJsonService(Session session);
+            IJsonService NewJsonService(Session session);
 
         }
 
@@ -76,7 +76,7 @@ namespace BcpRpc
             internal Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>> incomingProxyMap =
                 new Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>>();
 
-            public IncomingProxyRegistration(IList<IIncomingProxyEntry<Session>> incomingEntries)
+            public IncomingProxyRegistration(params IIncomingProxyEntry<Session>[] incomingEntries)
             {
                 foreach (var entry in incomingEntries)
                 {
