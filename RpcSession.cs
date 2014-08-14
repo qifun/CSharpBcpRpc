@@ -115,7 +115,7 @@ namespace BcpRpc
                 {
                     if (rpcSession.outgoingRpcResponseHandlers.TryGetValue(requestId, out oldHandler))
                     {
-                        throw new Exception("Illegal state!");
+                        throw new InvalidOperationException();
                     }
                     else
                     {
