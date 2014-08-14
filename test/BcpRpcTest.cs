@@ -8,6 +8,8 @@ using BcpRpc;
 using System.Collections;
 using com.qifun.jsonStream.rpc;
 using com.qifun.qforce.serverDemo1.entity;
+using com.qifun.qforce.serverDemo1.xlsx;
+using System.Threading;
 
 namespace test
 {
@@ -25,22 +27,22 @@ namespace test
             serverSocket.Listen(100);
             LocalEndPoint = serverSocket.LocalEndPoint;
             Debug.WriteLine("Listening: " + serverSocket.LocalEndPoint);
-            startAccept();
+            StartAccept();
         }
 
-        private void startAccept()
+        private void StartAccept()
         {
-            serverSocket.BeginAccept(new AsyncCallback(acceptCallback), null);
+            serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
         }
 
-        private void acceptCallback(IAsyncResult ar)
+        private void AcceptCallback(IAsyncResult ar)
         {
             try
             {
                 Socket newSocket = serverSocket.EndAccept(ar);
                 NetworkStream newStream = new NetworkStream(newSocket);
                 AddIncomingSocket(newStream);
-                startAccept();
+                StartAccept();
             }
             catch
             {
@@ -56,22 +58,29 @@ namespace test
     [TestClass]
     public class BcpRpcTest
     {
-
-        private class PingPongImpl : IPingPong
+        class ServerPingPongImpl : IPingPong
         {
             private RpcSession rpcSession;
-            public PingPongImpl(RpcSession rpcSession)
+
+            public ServerPingPongImpl(RpcSession rpcSession)
             {
                 this.rpcSession = rpcSession;
             }
 
-
-            public IFuture<object> sendSheet1(com.qifun.qforce.serverDemo1.xlsx.Sheet1 request)
+            public Action<Action<Sheet2>, Action<object>> sendSheet1(Sheet1 request)
             {
                 throw new NotImplementedException();
             }
 
-            public IFuture<object> ping(Ping request)
+            public Action<Action<Pong>, Action<object>> ping(Ping request)
+            {
+                return delegate(Action<Pong> responseHandler, Action<object> catcher)
+                {
+                    responseHandler(new Pong());
+                };
+            }
+
+            public Action<Action<Pong>, Action<object>> pong(Pong response)
             {
                 throw new NotImplementedException();
             }
@@ -93,10 +102,41 @@ namespace test
                 {
                 }
 
+                private static RpcSession.IncomingProxyRegistration<RpcSession> incomingServices = new IncomingProxyRegistration<RpcSession>(
+                    new IncomingProxyEntry<RpcSession>(
+                        typeof(IPingPong),
+                        (RpcSession rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ServerPingPongImpl(rpcSession)))
+                    );
+
                 protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices()
                 {
-                    throw new NotImplementedException();
+                    return incomingServices;
                 }
+            }
+        }
+
+        class ClientPingPongImpl : IPingPong
+        {
+            private RpcSession rpcSession;
+
+            public ClientPingPongImpl(RpcSession rpcSession)
+            {
+                this.rpcSession = rpcSession;
+            }
+
+            public Action<Action<Sheet2>, Action<object>> sendSheet1(Sheet1 request)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Action<Action<Pong>, Action<object>> ping(Ping request)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Action<Action<Pong>, Action<object>> pong(Pong response)
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -104,31 +144,29 @@ namespace test
         {
             private EndPoint localEndPoint;
 
-            private class PingPongRpcSession : TextSession
+            public class PingPongRpcSession : TextSession
             {
-                private PingPongImpl pingPongImpl;
 
                 public PingPongRpcSession(BcpSession bcpSession)
                     : base(bcpSession)
                 {
-                    pingPongImpl = new PingPongImpl(this);
                 }
 
                 protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices()
                 {
-                    return new IncomingProxyRegistration<RpcSession>(new System.Collections.Generic.List<IIncomingProxyEntry<RpcSession>> {
-                        new IncomingProxyEntry<RpcSession, PingPongImpl>(
-                            delegate(RpcSession rpcSession) { return pingPongImpl; },
+                    return new IncomingProxyRegistration<RpcSession>(
+                        new IncomingProxyEntry<RpcSession>(
                             typeof(IPingPong),
-                            com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong),
-                    });
+                            (RpcSession rpcSession) => 
+                                com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(this)))
+                    );
                 }
             }
-            private PingPongRpcSession pingPongRpcSession;
+            public PingPongRpcSession rpcSession;
 
             public PingPongClint(EndPoint localEndPoint)
             {
-                pingPongRpcSession = new PingPongRpcSession(this);
+                rpcSession = new PingPongRpcSession(this);
                 this.localEndPoint = localEndPoint;
                 this.Received += OnReceived;
             }
@@ -154,9 +192,25 @@ namespace test
             }
         }
 
+        readonly RpcSession.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession.OutgoingProxyEntry<IPingPong>(
+            typeof(IPingPong),
+            com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
+
         [TestMethod]
         public void TestMethod1()
         {
+            var server = new PingPongServer();
+            var client = new PingPongClint(server.LocalEndPoint);
+            var clientPingPong = client.rpcSession.OutgoingService(PingPongEntry);
+            clientPingPong.ping(new Ping())(
+            delegate(Pong pong)
+            {
+                Console.WriteLine("client receive: " + pong.pong);
+            },
+            delegate(object obj)
+            {
+            });
+            Thread.Sleep(3 * 1000);
         }
     }
 }

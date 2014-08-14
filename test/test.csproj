@@ -51,6 +51,61 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BcpRpcTest.cs" />
+    <Compile Include="entity\byte\ByteData.cs" />
+    <Compile Include="entity\byte\LittleEndianReader.cs" />
+    <Compile Include="entity\byte\LittleEndianWriter.cs" />
+    <Compile Include="entity\com\qifun\locale\Translator.cs" />
+    <Compile Include="entity\com\qifun\qforce\importCsv\CsvParser.cs" />
+    <Compile Include="entity\com\qifun\qforce\importCsv\error\ImporterError.cs" />
+    <Compile Include="entity\com\qifun\qforce\importCsv\ImportedRow.cs" />
+    <Compile Include="entity\com\qifun\qforce\importCsv\Importer.cs" />
+    <Compile Include="entity\com\qifun\qforce\importCsv\StringInterpolation.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\Io.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\IPingPong.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\outgoingProxies_Io\OutgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\Ping.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\Pong.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\xlsx\Characters.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\xlsx\DemoConfig.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\xlsx\Items.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\xlsx\Maps.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\xlsx\Quests.cs" />
+    <Compile Include="entity\cs\io\NativeInput.cs" />
+    <Compile Include="entity\cs\io\NativeOutput.cs" />
+    <Compile Include="entity\EReg.cs" />
+    <Compile Include="entity\haxeparser\Data.cs" />
+    <Compile Include="entity\haxeparser\HaxeLexer.cs" />
+    <Compile Include="entity\haxeparser\HaxeParser.cs" />
+    <Compile Include="entity\haxe\crypto\Adler32.cs" />
+    <Compile Include="entity\haxe\ds\Option.cs" />
+    <Compile Include="entity\haxe\io\Path.cs" />
+    <Compile Include="entity\haxe\macro\PositionTools.cs" />
+    <Compile Include="entity\haxe\macro\TypedExprTools.cs" />
+    <Compile Include="entity\haxe\zip\Entry.cs" />
+    <Compile Include="entity\haxe\zip\FlushMode.cs" />
+    <Compile Include="entity\haxe\zip\Huffman.cs" />
+    <Compile Include="entity\haxe\zip\InflateImpl.cs" />
+    <Compile Include="entity\haxe\zip\Reader.cs" />
+    <Compile Include="entity\haxe\zip\Uncompress.cs" />
+    <Compile Include="entity\hxparse\LexEngine.cs" />
+    <Compile Include="entity\hxparse\Lexer.cs" />
+    <Compile Include="entity\hxparse\LexerTokenSource.cs" />
+    <Compile Include="entity\hxparse\NoMatch.cs" />
+    <Compile Include="entity\hxparse\Parser.cs" />
+    <Compile Include="entity\hxparse\ParserBuilder.cs" />
+    <Compile Include="entity\hxparse\Position.cs" />
+    <Compile Include="entity\hxparse\RuleBuilder.cs" />
+    <Compile Include="entity\hxparse\Ruleset.cs" />
+    <Compile Include="entity\hxparse\State.cs" />
+    <Compile Include="entity\hxparse\Unexpected.cs" />
+    <Compile Include="entity\hxparse\UnexpectedChar.cs" />
+    <Compile Include="entity\Sys.cs" />
+    <Compile Include="entity\sys\FileSystem.cs" />
+    <Compile Include="entity\sys\io\File.cs" />
+    <Compile Include="entity\sys\io\FileInput.cs" />
+    <Compile Include="entity\sys\io\FileOutput.cs" />
+    <Compile Include="entity\sys\io\FileSeek.cs" />
+    <Compile Include="entity\sys\io\Process.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +117,16 @@
       <Project>{23f822e2-727d-4edb-a2e4-01db1c1bfbaf}</Project>
       <Name>csharp-bcp-rpc</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="entity\com\dongxiguo\continuation\utils\" />
+    <Folder Include="entity\com\qifun\jsonStream\builderPlugin\" />
+    <Folder Include="entity\com\qifun\jsonStream\deserializerPlugin\" />
+    <Folder Include="entity\com\qifun\jsonStream\rpc\" />
+    <Folder Include="entity\com\qifun\jsonStream\serializerPlugin\" />
+    <Folder Include="entity\com\qifun\jsonStream\unknown\" />
+    <Folder Include="entity\cs\internal\" />
+    <Folder Include="entity\dotnet\system\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

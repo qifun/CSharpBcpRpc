@@ -34,39 +34,17 @@ namespace BcpRpc
             }
         }
 
-        public interface IIncomingProxyEntry<Session>
+        public class IncomingProxyEntry<Session>
         {
-
-            string Name { get; }
-            
-            IJsonService NewJsonService(Session session);
-
-        }
-
-        public class IncomingProxyEntry<Session, Service> : IIncomingProxyEntry<Session>
-        {
-            internal readonly RpcDelegate.RpcFactoryCallback<Session, Service> rpcFactory;
+            internal readonly RpcDelegate.IncomingProxyCallback<Session> rpcFactory;
             internal readonly System.Type serviceType;
-            internal readonly RpcDelegate.IncomingViewCallback<Service> incomingView;
 
             public IncomingProxyEntry(
-                RpcDelegate.RpcFactoryCallback<Session, Service> rpcFactory,
                 System.Type serviceType,
-                RpcDelegate.IncomingViewCallback<Service> incomingView)
+                RpcDelegate.IncomingProxyCallback<Session> rpcFactory)
             {
                 this.rpcFactory = rpcFactory;
                 this.serviceType = serviceType;
-                this.incomingView = incomingView;
-            }
-
-            string IIncomingProxyEntry<Session>.Name
-            {
-                get { return serviceType.ToString(); }
-            }
-
-            IJsonService IIncomingProxyEntry<Session>.NewJsonService(Session session)
-            {
-                return incomingView(rpcFactory(session));
             }
 
         }
@@ -76,11 +54,11 @@ namespace BcpRpc
             internal Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>> incomingProxyMap =
                 new Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>>();
 
-            public IncomingProxyRegistration(params IIncomingProxyEntry<Session>[] incomingEntries)
+            public IncomingProxyRegistration(params IncomingProxyEntry<Session>[] incomingEntries)
             {
                 foreach (var entry in incomingEntries)
                 {
-                    incomingProxyMap.Add(entry.Name, entry.NewJsonService);
+                    incomingProxyMap.Add(entry.serviceType.Name, entry.rpcFactory);
                 }
             }
 
@@ -96,7 +74,7 @@ namespace BcpRpc
                 this.element = element;
             }
 
-            public object _hx_invoke2_o(double argumentValue0, object argumentRef0, double argumentValue1, object argumentRef1)
+            override public object __hx_invoke2_o(double argumentValue0, object argumentRef0, double argumentValue1, object argumentRef1)
             {
                 var yieldFunction = (Function)argumentRef0;
                 var returnFunction = (Function)argumentRef1;
@@ -149,7 +127,7 @@ namespace BcpRpc
                     JsonStream.OBJECT(Generator1(new JsonStreamPair(
                         requestId.ToString(),
                         JsonStream.OBJECT(Generator1(new JsonStreamPair(serviceClassName, request)))))))));
-                rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(request));
+                rpcSession.bcpSession.Send(rpcSession.ToByteBuffer(requestStream));
             }
         }
 
@@ -193,8 +171,7 @@ namespace BcpRpc
 
         private void OnReceived(object sender, BcpSession.ReceivedEventArgs e)
         {
-            IList<ArraySegment<byte>> buffers = e.Buffers;
-            var jsonStream = ToJsonStream(buffers);
+            var jsonStream = ToJsonStream(e.Buffers);
             var requestOrResponsePairs = WrappedHaxeIterator.Wrap<JsonStreamPair>(jsonStream);
             while (requestOrResponsePairs.HasNext())
             {
