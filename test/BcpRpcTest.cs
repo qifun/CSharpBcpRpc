@@ -108,9 +108,9 @@ namespace test
                         (RpcSession rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ServerPingPongImpl(rpcSession)))
                     );
 
-                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices()
+                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices
                 {
-                    return incomingServices;
+                    get { return incomingServices; }
                 }
             }
         }
@@ -152,14 +152,15 @@ namespace test
                 {
                 }
 
-                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices()
-                {
-                    return new IncomingProxyRegistration<RpcSession>(
-                        new IncomingProxyEntry<RpcSession>(
-                            typeof(IPingPong),
-                            (RpcSession rpcSession) => 
-                                com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(this)))
+                private static RpcSession.IncomingProxyRegistration<RpcSession> incomingServices = new IncomingProxyRegistration<RpcSession>(
+                    new IncomingProxyEntry<RpcSession>(
+                        typeof(IPingPong),
+                        (RpcSession rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(rpcSession)))
                     );
+
+                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices 
+                {
+                    get { return incomingServices; }
                 }
             }
             public PingPongRpcSession rpcSession;

@@ -87,7 +87,11 @@ namespace BcpRpc
             return new Generator<Element>(new GeneratorFunction<Element>(2, 0, element));
         }
 
-        protected abstract IncomingProxyRegistration<RpcSession> IncomingServices();
+        protected abstract IncomingProxyRegistration<RpcSession> IncomingServices
+        {
+            get;
+        }
+
         private int nextRequestId = -1;
         private Dictionary<int, IJsonResponseHandler> outgoingRpcResponseHandlers = new Dictionary<int, IJsonResponseHandler>();
         private object outgoingRpcResponseHandlerLock = new Object();
@@ -190,7 +194,7 @@ namespace BcpRpc
                                 {
                                     var servicePair = (JsonStreamPair)servicePairs.Next();
                                     RpcDelegate.IncomingProxyCallback<RpcSession> incomingRpc;
-                                    if (IncomingServices().incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
+                                    if (IncomingServices.incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
                                     {
                                         incomingRpc(this).apply(servicePair.value, new JsonResponseHandler(this, id));
                                     }
