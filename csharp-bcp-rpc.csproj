@@ -342,7 +342,6 @@
     <Compile Include="RpcSession.cs" />
     <Compile Include="TextSession.cs" />
     <Compile Include="IWrappedHaxeIterator.cs" />
-    <Compile Include="WrappedHaxeIterator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\csharp-bcp\csharp-bcp.csproj">
