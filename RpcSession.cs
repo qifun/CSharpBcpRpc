@@ -64,7 +64,7 @@ namespace BcpRpc
 
         }
 
-        internal class GeneratorFunction<Element> : Function
+        private class GeneratorFunction<Element> : Function
         {
             private Element element;
 
