@@ -12,6 +12,8 @@ namespace BcpRpc
         private IEnumerator<ArraySegment<Byte>> buffers;
         private ArraySegment<Byte> current = new ArraySegment<byte>();
 
+        public ArraySegment<Byte> Current { get { return current; } }
+
         public ArraySegmentInput(IList<ArraySegment<Byte>> buffers)
         {
             this.buffers = buffers.GetEnumerator();
@@ -62,10 +64,13 @@ namespace BcpRpc
                     int result = current.Count;
                     byte[] bytes = current.ToArray();
                     System.Array.Copy(bytes, 0, s.getData(), pos, result);
-                    current = new ArraySegment<byte>();
                     if (buffers.MoveNext())
                     {
                         current = buffers.Current;
+                    }
+                    else
+                    {
+                        current = new ArraySegment<byte>();
                     }
                     return result;
                 }

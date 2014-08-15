@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using haxe.lang;
 using com.qifun.jsonStream.io;
+using com.qifun.jsonStream;
 
 namespace BcpRpc
 {
@@ -21,9 +22,20 @@ namespace BcpRpc
             return output.Buffers;
         }
 
-        protected override com.qifun.jsonStream.JsonStream ToJsonStream(IList<ArraySegment<byte>> buffers)
+        protected override JsonStream ToJsonStream(IList<ArraySegment<byte>> buffers)
         {
-            return TextParser.parseInput(new ArraySegmentInput(buffers));
+            var arraySegmentInput = new ArraySegmentInput(buffers);
+            JsonStream jsonStream = null;
+            try
+            {
+                jsonStream = TextParser.parseInput(new ArraySegmentInput(buffers));
+            }
+            catch (Exception e)
+            {
+                var current = Encoding.Default.GetString(arraySegmentInput.Current.ToArray());
+                throw new ParseTextException("Parse exception at: " + current, e);
+            }
+            return jsonStream;
         }
     }
 }

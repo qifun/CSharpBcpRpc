@@ -28,5 +28,13 @@ namespace BcpRpc
         {
         }
     }
+
+    public class ParseTextException: RpcException
+    {
+        public ParseTextException(string message = null, Exception cause = null)
+            : base(message, cause)
+        { 
+        }
+    }
     
 }

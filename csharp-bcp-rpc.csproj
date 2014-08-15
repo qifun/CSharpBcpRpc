@@ -50,9 +50,6 @@
     <Compile Include="json-stream\com\dongxiguo\continuation\utils\Generator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="json-stream\com\qifun\hddl\optionalStm\Ref.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\GeneratedBuilderPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -68,11 +65,16 @@
     <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Map.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Ref.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Set.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Vector.cs" />
-    <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\CrossPlatformDeserializerPlugins.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Vector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\CrossPlatformDeserializerPlugins.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\CSharpDeserializerPlugins.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -145,7 +147,9 @@
     <Compile Include="json-stream\com\qifun\jsonStream\rpc\OutgoingProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\CrossPlatformSerializerPlugins.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\CrossPlatformSerializerPlugins.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="json-stream\com\qifun\jsonStream\serializerPlugin\CSharpSerializerPlugins.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -345,6 +349,9 @@
       <Project>{fbc8c692-fa6b-46af-93de-9ce1bedbe1db}</Project>
       <Name>csharp-bcp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="json-stream\com\qifun\hddl\optionalStm\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

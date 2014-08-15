@@ -58,6 +58,10 @@ namespace test
     [TestClass]
     public class BcpRpcTest
     {
+        static Object testLock = new Object();
+        volatile static string serverResult = null;
+        volatile static string clientResult = null;
+
         class ServerPingPongImpl : IPingPong
         {
             private RpcSession rpcSession;
@@ -74,9 +78,16 @@ namespace test
 
             public Action<Action<Pong>, Action<object>> ping(Ping request)
             {
+                lock (testLock)
+                {
+                    serverResult = request.ping;
+                    Monitor.Pulse(testLock);
+                }
                 return delegate(Action<Pong> responseHandler, Action<object> catcher)
                 {
-                    responseHandler(new Pong());
+                    var serverPong = new Pong();
+                    serverPong.pong = "pong";
+                    responseHandler(serverPong);
                 };
             }
 
@@ -158,7 +169,7 @@ namespace test
                         (RpcSession rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(rpcSession)))
                     );
 
-                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices 
+                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices
                 {
                     get { return incomingServices; }
                 }
@@ -191,27 +202,53 @@ namespace test
             private void OnReceived(object sender, ReceivedEventArgs e)
             {
             }
-        }
 
-        readonly RpcSession.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession.OutgoingProxyEntry<IPingPong>(
-            typeof(IPingPong),
-            com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
+            private readonly RpcSession.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession.OutgoingProxyEntry<IPingPong>(
+                typeof(IPingPong),
+                com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
+
+            public void pingRequest()
+            {
+                var clientPingPong = this.rpcSession.OutgoingService(PingPongEntry);
+                var clientPing = new Ping();
+                clientPing.ping = "ping";
+                clientPingPong.ping(clientPing)(
+                delegate(Pong response)
+                {
+                    lock (testLock)
+                    {
+                        clientResult = response.pong;
+                        Monitor.Pulse(testLock);
+                    }
+                },
+                delegate(object obj)
+                {
+                    lock (testLock)
+                    {
+                        clientResult = "fail";
+                        Monitor.Pulse(testLock);
+                    }
+                });
+            }
+        }
 
         [TestMethod]
         public void TestMethod1()
         {
             var server = new PingPongServer();
             var client = new PingPongClint(server.LocalEndPoint);
-            var clientPingPong = client.rpcSession.OutgoingService(PingPongEntry);
-            clientPingPong.ping(new Ping())(
-            delegate(Pong pong)
+            client.pingRequest();
+            lock (testLock)
             {
-                Console.WriteLine("client receive: " + pong.pong);
-            },
-            delegate(object obj)
-            {
-            });
-            Thread.Sleep(3 * 1000);
+                while (clientResult == null || serverResult == null)
+                {
+                    Monitor.Wait(testLock);
+                }
+            }
+            Assert.AreEqual(serverResult, "ping");
+            Assert.AreEqual(clientResult, "pong");
+            client.ShutDown();
+            server.Clear();
         }
     }
 }
