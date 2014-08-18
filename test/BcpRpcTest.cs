@@ -151,56 +151,52 @@ namespace test
             }
         }
 
-        class PingPongClint : BcpClient
+        public class PingPongRpcClient : TextSession<Bcp.BcpSession>
         {
-            private EndPoint localEndPoint;
-
-            public class PingPongRpcSession : TextSession<Bcp.BcpSession>
+            public PingPongRpcClient(BcpSession bcpSession)
+                : base(bcpSession)
             {
-
-                public PingPongRpcSession(BcpSession bcpSession)
-                    : base(bcpSession)
-                {
-                }
-
-                private static RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> incomingServices = new IncomingProxyRegistration<RpcSession<BcpSession>>(
-                    new IncomingProxyEntry<RpcSession<BcpSession>>(
-                        typeof(IPingPong),
-                        (RpcSession<BcpSession> rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(rpcSession)))
-                    );
-
-                protected override RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> IncomingServices
-                {
-                    get { return incomingServices; }
-                }
-            }
-            public PingPongRpcSession rpcSession;
-
-            public PingPongClint(EndPoint localEndPoint)
-            {
-                rpcSession = new PingPongRpcSession(this);
-                this.localEndPoint = localEndPoint;
-                this.Received += OnReceived;
             }
 
-            protected override Socket Connect()
+            private static RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> incomingServices = new IncomingProxyRegistration<RpcSession<BcpSession>>(
+                new IncomingProxyEntry<RpcSession<BcpSession>>(
+                    typeof(IPingPong),
+                    (RpcSession<BcpSession> rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(rpcSession)))
+                );
+
+            protected override RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> IncomingServices
             {
-                try
-                {
-                    Debug.WriteLine("Connecting...");
-                    EndPoint ep = localEndPoint;
-                    Socket socket = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                    socket.Connect(ep);
-                    return socket;
-                }
-                catch
-                {
-                    throw new SocketException();
-                }
+                get { return incomingServices; }
             }
 
-            private void OnReceived(object sender, ReceivedEventArgs e)
+            public class PingPongClint : BcpClient
             {
+                private EndPoint localEndPoint;
+                public PingPongClint(EndPoint localEndPoint)
+                {
+                    this.localEndPoint = localEndPoint;
+                    this.Received += OnReceived;
+                }
+
+                protected override Socket Connect()
+                {
+                    try
+                    {
+                        Debug.WriteLine("Connecting...");
+                        EndPoint ep = localEndPoint;
+                        Socket socket = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                        socket.Connect(ep);
+                        return socket;
+                    }
+                    catch
+                    {
+                        throw new SocketException();
+                    }
+                }
+
+                private void OnReceived(object sender, ReceivedEventArgs e)
+                {
+                }
             }
 
             private readonly RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong>(
@@ -209,7 +205,7 @@ namespace test
 
             public void pingRequest()
             {
-                var clientPingPong = this.rpcSession.OutgoingService(PingPongEntry);
+                var clientPingPong = this.OutgoingService(PingPongEntry);
                 var clientPing = new Ping();
                 clientPing.ping = "ping";
                 clientPingPong.ping(clientPing)(
@@ -236,7 +232,7 @@ namespace test
         public void TestMethod1()
         {
             var server = new PingPongServer();
-            var client = new PingPongClint(server.LocalEndPoint);
+            var client = new PingPongRpcClient(new PingPongRpcClient.PingPongClint(server.LocalEndPoint));
             client.pingRequest();
             lock (testLock)
             {
@@ -247,7 +243,7 @@ namespace test
             }
             Assert.AreEqual(serverResult, "ping");
             Assert.AreEqual(clientResult, "pong");
-            client.ShutDown();
+            client.bcpSession.ShutDown();
             server.Clear();
         }
     }
