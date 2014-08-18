@@ -4,3 +4,7 @@ TestResults
 /*.suo
 /*.user
 json-stream
+bin
+entity
+obj
+/test/*.user
