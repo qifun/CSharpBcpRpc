@@ -22,7 +22,7 @@ namespace BcpRpc
         }
         private Bcp.BcpSession bcpSession;
 
-        public class OutgoingProxyEntry<Service>
+        public sealed class OutgoingProxyEntry<Service>
         {
             internal readonly System.Type serviceType;
             internal readonly RpcDelegate.OutgoingCallback<Service> outgoingView;
@@ -34,7 +34,7 @@ namespace BcpRpc
             }
         }
 
-        public class IncomingProxyEntry<Session>
+        public sealed class IncomingProxyEntry<Session>
         {
             internal readonly RpcDelegate.IncomingProxyCallback<Session> rpcFactory;
             internal readonly System.Type serviceType;
@@ -49,7 +49,7 @@ namespace BcpRpc
 
         }
 
-        public class IncomingProxyRegistration<Session>
+        public sealed class IncomingProxyRegistration<Session>
         {
             internal Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>> incomingProxyMap =
                 new Dictionary<string, RpcDelegate.IncomingProxyCallback<Session>>();
@@ -141,7 +141,7 @@ namespace BcpRpc
             return entry.outgoingView(new JsonService(this, serviceClassName));
         }
 
-        public class JsonResponseHandler : IJsonResponseHandler
+        public sealed class JsonResponseHandler : IJsonResponseHandler
         {
             private string id;
             private RpcSession rpcSession;
