@@ -64,9 +64,9 @@ namespace test
 
         class ServerPingPongImpl : IPingPong
         {
-            private RpcSession rpcSession;
+            private RpcSession<BcpSession> rpcSession;
 
-            public ServerPingPongImpl(RpcSession rpcSession)
+            public ServerPingPongImpl(RpcSession<BcpSession> rpcSession)
             {
                 this.rpcSession = rpcSession;
             }
@@ -106,20 +106,20 @@ namespace test
                 return session;
             }
 
-            private class PingPongRpcSession : TextSession
+            private class PingPongRpcSession : TextSession<BcpSession>
             {
                 public PingPongRpcSession(BcpSession bcpSession)
                     : base(bcpSession)
                 {
                 }
 
-                private static RpcSession.IncomingProxyRegistration<RpcSession> incomingServices = new IncomingProxyRegistration<RpcSession>(
-                    new IncomingProxyEntry<RpcSession>(
+                private static RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> incomingServices = new IncomingProxyRegistration<RpcSession<BcpSession>>(
+                    new IncomingProxyEntry<RpcSession<BcpSession>>(
                         typeof(IPingPong),
-                        (RpcSession rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ServerPingPongImpl(rpcSession)))
+                        (RpcSession<BcpSession> rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ServerPingPongImpl(rpcSession)))
                     );
 
-                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices
+                protected override RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> IncomingServices
                 {
                     get { return incomingServices; }
                 }
@@ -128,9 +128,9 @@ namespace test
 
         class ClientPingPongImpl : IPingPong
         {
-            private RpcSession rpcSession;
+            private RpcSession<Bcp.BcpSession> rpcSession;
 
-            public ClientPingPongImpl(RpcSession rpcSession)
+            public ClientPingPongImpl(RpcSession<Bcp.BcpSession> rpcSession)
             {
                 this.rpcSession = rpcSession;
             }
@@ -155,7 +155,7 @@ namespace test
         {
             private EndPoint localEndPoint;
 
-            public class PingPongRpcSession : TextSession
+            public class PingPongRpcSession : TextSession<Bcp.BcpSession>
             {
 
                 public PingPongRpcSession(BcpSession bcpSession)
@@ -163,13 +163,13 @@ namespace test
                 {
                 }
 
-                private static RpcSession.IncomingProxyRegistration<RpcSession> incomingServices = new IncomingProxyRegistration<RpcSession>(
-                    new IncomingProxyEntry<RpcSession>(
+                private static RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> incomingServices = new IncomingProxyRegistration<RpcSession<BcpSession>>(
+                    new IncomingProxyEntry<RpcSession<BcpSession>>(
                         typeof(IPingPong),
-                        (RpcSession rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(rpcSession)))
+                        (RpcSession<BcpSession> rpcSession) => com.qifun.qforce.serverDemo1.entity.IncomingProxyFactory.incomingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong(new ClientPingPongImpl(rpcSession)))
                     );
 
-                protected override RpcSession.IncomingProxyRegistration<RpcSession> IncomingServices
+                protected override RpcSession<BcpSession>.IncomingProxyRegistration<RpcSession<BcpSession>> IncomingServices
                 {
                     get { return incomingServices; }
                 }
@@ -203,7 +203,7 @@ namespace test
             {
             }
 
-            private readonly RpcSession.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession.OutgoingProxyEntry<IPingPong>(
+            private readonly RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong>(
                 typeof(IPingPong),
                 com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
 

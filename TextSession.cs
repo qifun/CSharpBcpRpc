@@ -11,7 +11,7 @@ using Bcp;
 
 namespace BcpRpc
 {
-    public abstract class TextSession : RpcSession
+    public abstract class TextSession<BcpSession> : RpcSession<BcpSession> where BcpSession : Bcp.BcpSession
     {
         public TextSession(Bcp.BcpSession bcpSession)
             : base()
@@ -47,9 +47,9 @@ namespace BcpRpc
         private class JsonService : IJsonService
         {
             private string serviceClassName;
-            private TextSession textSession;
+            private TextSession<BcpSession> textSession;
 
-            public JsonService(TextSession textSession, string serviceClassName)
+            public JsonService(TextSession<BcpSession> textSession, string serviceClassName)
             {
                 this.serviceClassName = serviceClassName;
                 this.textSession = textSession;
@@ -88,9 +88,9 @@ namespace BcpRpc
         private sealed class JsonResponseHandler : IJsonResponseHandler
         {
             private string id;
-            private TextSession textSession;
+            private TextSession<BcpSession> textSession;
 
-            public JsonResponseHandler(TextSession textSession, string id)
+            public JsonResponseHandler(TextSession<BcpSession> textSession, string id)
             {
                 this.textSession = textSession;
                 this.id = id;
@@ -129,7 +129,7 @@ namespace BcpRpc
 
         private static int JsonStreamObjectIndex = Type.getEnumConstructs(typeof(JsonStream)).indexOf("OBJECT", Null<int>._ofDynamic(0));
 
-        private void OnReceived(object sender, BcpSession.ReceivedEventArgs e)
+        private void OnReceived(object sender, Bcp.BcpSession.ReceivedEventArgs e)
         {
             var jsonStream = ToJsonStream(e.Buffers);
             if (Type.enumIndex(jsonStream) == JsonStreamObjectIndex)
@@ -155,7 +155,7 @@ namespace BcpRpc
                                             while (ReflectHasNext(servicePairs))
                                             {
                                                 var servicePair = ReflectNext<JsonStreamPair>(servicePairs);
-                                                RpcDelegate.IncomingProxyCallback<RpcSession> incomingRpc;
+                                                RpcDelegate.IncomingProxyCallback<RpcSession<BcpSession>> incomingRpc;
                                                 if (IncomingServices.incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
                                                 {
                                                     incomingRpc(this).apply(servicePair.value, new JsonResponseHandler(this, id));

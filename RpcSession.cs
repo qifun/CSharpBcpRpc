@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace BcpRpc
 {
-    public abstract class RpcSession
+    public abstract class RpcSession<BcpSession> where BcpSession : Bcp.BcpSession
     {
 
         public RpcSession()
@@ -84,7 +84,7 @@ namespace BcpRpc
             return new Generator<Element>(new GeneratorFunction<Element>(2, 0, element));
         }
 
-        protected abstract IncomingProxyRegistration<RpcSession> IncomingServices
+        protected abstract IncomingProxyRegistration<RpcSession<BcpSession>> IncomingServices
         {
             get;
         }
