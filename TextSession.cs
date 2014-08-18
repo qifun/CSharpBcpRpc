@@ -19,7 +19,7 @@ namespace BcpRpc
             this.bcpSession = bcpSession;
             this.bcpSession.Received += OnReceived;
         }
-        private Bcp.BcpSession bcpSession;
+        public readonly Bcp.BcpSession bcpSession;
 
         protected override IList<ArraySegment<byte>> ToByteBuffer(com.qifun.jsonStream.JsonStream js)
         {
