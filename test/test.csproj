@@ -51,7 +51,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BcpRpcTest.cs" />
-    <Compile Include="ClientDemo.cs" />
     <Compile Include="entity\byte\ByteData.cs" />
     <Compile Include="entity\byte\LittleEndianReader.cs" />
     <Compile Include="entity\byte\LittleEndianWriter.cs" />
