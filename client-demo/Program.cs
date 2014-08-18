@@ -90,36 +90,36 @@ namespace client_demo
                 {
                 }
             }
+        }
 
-            private readonly RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong>(
-                typeof(IPingPong),
-                com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
+        private static readonly RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong>(
+            typeof(IPingPong),
+            com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
 
-            public void pingRequest()
+        public static void pingRequest(PingPongRpcClient client)
+        {
+            var clientPingPong = client.OutgoingService(PingPongEntry);
+            var clientPing = new Ping();
+            clientPing.ping = "client_ping";
+            Console.WriteLine("Client send ping request!");
+            clientPingPong.ping(clientPing)(
+            delegate(Pong response)
             {
-                var clientPingPong = this.OutgoingService(PingPongEntry);
-                var clientPing = new Ping();
-                clientPing.ping = "client_ping";
-                Console.WriteLine("Client send ping request!");
-                clientPingPong.ping(clientPing)(
-                delegate(Pong response)
+                if (response.pong == "server_pong")
                 {
-                    if (response.pong == "server_pong")
-                    {
-                        Console.WriteLine("Success, client receive: " + response.pong);
-                    }
-                },
-                delegate(object obj)
-                {
-                    Console.WriteLine("Fail, cient receive: " + obj);
-                });
-            }
+                    Console.WriteLine("Success, client receive: " + response.pong);
+                }
+            },
+            delegate(object obj)
+            {
+                Console.WriteLine("Fail, cient receive: " + obj);
+            });
         }
 
         static void Main(string[] args)
         {
             var client = new PingPongRpcClient(new PingPongRpcClient.BcpClient());
-            client.pingRequest();
+            pingRequest(client);
             while (true)
             {
                 Thread.Sleep(10 * 1000);

@@ -198,34 +198,34 @@ namespace test
                 {
                 }
             }
+        }
 
-            private readonly RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong>(
-                typeof(IPingPong),
-                com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
+        private static readonly RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong> PingPongEntry = new RpcSession<BcpSession>.OutgoingProxyEntry<IPingPong>(
+            typeof(IPingPong),
+            com.qifun.qforce.serverDemo1.entity.OutgoingProxyFactory.outgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong);
 
-            public void pingRequest()
+        public static void pingRequest(PingPongRpcClient client)
+        {
+            var clientPingPong = client.OutgoingService(PingPongEntry);
+            var clientPing = new Ping();
+            clientPing.ping = "ping";
+            clientPingPong.ping(clientPing)(
+            delegate(Pong response)
             {
-                var clientPingPong = this.OutgoingService(PingPongEntry);
-                var clientPing = new Ping();
-                clientPing.ping = "ping";
-                clientPingPong.ping(clientPing)(
-                delegate(Pong response)
+                lock (testLock)
                 {
-                    lock (testLock)
-                    {
-                        clientResult = response.pong;
-                        Monitor.Pulse(testLock);
-                    }
-                },
-                delegate(object obj)
+                    clientResult = response.pong;
+                    Monitor.Pulse(testLock);
+                }
+            },
+            delegate(object obj)
+            {
+                lock (testLock)
                 {
-                    lock (testLock)
-                    {
-                        clientResult = "fail";
-                        Monitor.Pulse(testLock);
-                    }
-                });
-            }
+                    clientResult = "fail";
+                    Monitor.Pulse(testLock);
+                }
+            });
         }
 
         [TestMethod]
@@ -233,7 +233,7 @@ namespace test
         {
             var server = new PingPongServer();
             var client = new PingPongRpcClient(new PingPongRpcClient.PingPongClint(server.LocalEndPoint));
-            client.pingRequest();
+            pingRequest(client);
             lock (testLock)
             {
                 while (clientResult == null || serverResult == null)
