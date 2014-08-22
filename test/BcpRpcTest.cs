@@ -175,7 +175,6 @@ namespace test
                 public PingPongClint(EndPoint localEndPoint)
                 {
                     this.localEndPoint = localEndPoint;
-                    this.Received += OnReceived;
                 }
 
                 protected override Socket Connect()
@@ -194,9 +193,6 @@ namespace test
                     }
                 }
 
-                private void OnReceived(object sender, ReceivedEventArgs e)
-                {
-                }
             }
         }
 

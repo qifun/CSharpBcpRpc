@@ -68,7 +68,6 @@ namespace client_demo
             {
                 public BcpClient()
                 {
-                    this.Received += OnReceived;
                 }
 
                 protected override Socket Connect()
@@ -86,9 +85,6 @@ namespace client_demo
                     }
                 }
 
-                private void OnReceived(object sender, ReceivedEventArgs e)
-                {
-                }
             }
         }
 
