@@ -2,9 +2,6 @@ bin/
 obj/
 TestResults
 /*.suo
-/*.user
+*.user
 json-stream
-bin
 entity
-obj
-/test/*.user
