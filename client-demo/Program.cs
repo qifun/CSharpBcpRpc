@@ -1,4 +1,4 @@
-/*
+﻿/*
  * csharp-bcp-rpc
  * Copyright 2014 深圳岂凡网络有限公司 (Shenzhen QiFun Network Corp., LTD)
  * 
@@ -113,7 +113,7 @@ namespace client_demo
         {
             var clientPingPong = client.OutgoingService(PingPongEntry);
             var clientPing = new Ping();
-            clientPing.ping = "client_ping";
+            clientPing.ping = "exception";
             Console.WriteLine("Client send ping request!");
             clientPingPong.ping(clientPing)(
             delegate(Pong response)
@@ -123,9 +123,12 @@ namespace client_demo
                     Console.WriteLine("Success, client receive: " + response.pong);
                 }
             },
-            delegate(object obj)
+            delegate(object exception)
             {
-                Console.WriteLine("Fail, cient receive: " + obj);
+                if (exception is PingPongException)
+                {
+                    Console.WriteLine("Fail, cient receive: " + exception);
+                }
             });
         }
 
