@@ -144,7 +144,7 @@ namespace BcpRpc
             return Runtime.genericCast<Element>(Reflect.callMethod(iterator, Reflect.field(iterator, "next"), new Array<object>()));
         }
 
-        private static int JsonStreamObjectIndex = Type.getEnumConstructs(typeof(JsonStream)).indexOf("OBJECT", Null<int>._ofDynamic(0));
+        private static readonly int JsonStreamObjectIndex = Type.getEnumConstructs(typeof(JsonStream)).indexOf("OBJECT", Null<int>._ofDynamic(0));
 
         private void OnReceived(object sender, Bcp.BcpSession.ReceivedEventArgs e)
         {
