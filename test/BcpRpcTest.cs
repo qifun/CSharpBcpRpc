@@ -90,11 +90,6 @@ namespace test
                     responseHandler(serverPong);
                 };
             }
-
-            public Action<Action<Pong>, Action<object>> pong(Pong response)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         private class PingPongServer : TestServer
@@ -141,11 +136,6 @@ namespace test
             }
 
             public Action<Action<Pong>, Action<object>> ping(Ping request)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Action<Action<Pong>, Action<object>> pong(Pong response)
             {
                 throw new NotImplementedException();
             }
