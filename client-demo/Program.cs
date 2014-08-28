@@ -1,3 +1,20 @@
+﻿/*
+ * csharp-bcp-rpc
+ * Copyright 2014 深圳岂凡网络有限公司 (Shenzhen QiFun Network Corp., LTD)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 ﻿using Bcp;
 using BcpRpc;
 using com.qifun.qforce.serverDemo1.entity;
@@ -96,7 +113,7 @@ namespace client_demo
         {
             var clientPingPong = client.OutgoingService(PingPongEntry);
             var clientPing = new Ping();
-            clientPing.ping = "client_ping";
+            clientPing.ping = "exception";
             Console.WriteLine("Client send ping request!");
             clientPingPong.ping(clientPing)(
             delegate(Pong response)
@@ -106,9 +123,12 @@ namespace client_demo
                     Console.WriteLine("Success, client receive: " + response.pong);
                 }
             },
-            delegate(object obj)
+            delegate(object exception)
             {
-                Console.WriteLine("Fail, cient receive: " + obj);
+                if (exception is PingPongException)
+                {
+                    Console.WriteLine("Fail, cient receive: " + exception);
+                }
             });
         }
 

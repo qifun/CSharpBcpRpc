@@ -56,6 +56,7 @@
     <Compile Include="entity\byte\LittleEndianWriter.cs" />
     <Compile Include="entity\com\qifun\locale\Translator.cs" />
     <Compile Include="entity\com\qifun\qforce\importCsv\CsvParser.cs" />
+    <Compile Include="entity\com\qifun\qforce\importCsv\error\CsvParserError.cs" />
     <Compile Include="entity\com\qifun\qforce\importCsv\error\ImporterError.cs" />
     <Compile Include="entity\com\qifun\qforce\importCsv\ImportedRow.cs" />
     <Compile Include="entity\com\qifun\qforce\importCsv\Importer.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\IPingPong.cs" />
     <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\outgoingProxies_Io\OutgoingProxy_com_qifun_qforce_serverDemo1_entity_IPingPong.cs" />
     <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\Ping.cs" />
+    <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\PingPongException.cs" />
     <Compile Include="entity\com\qifun\qforce\serverDemo1\entity\Pong.cs" />
     <Compile Include="entity\com\qifun\qforce\serverDemo1\xlsx\Characters.cs" />
     <Compile Include="entity\com\qifun\qforce\serverDemo1\xlsx\DemoConfig.cs" />

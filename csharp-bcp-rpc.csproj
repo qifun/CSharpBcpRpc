@@ -62,16 +62,10 @@
     <Compile Include="json-stream\com\qifun\jsonStream\builderPlugin\RawBuilderPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Map.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Ref.cs" />
-    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Set.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\Vector.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\CrossMap.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\CrossRef.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\CrossSet.cs" />
+    <Compile Include="json-stream\com\qifun\jsonStream\crossPlatformTypes\CrossVector.cs" />
     <Compile Include="json-stream\com\qifun\jsonStream\deserializerPlugin\CrossPlatformDeserializerPlugins.cs">
       <SubType>Code</SubType>
     </Compile>
