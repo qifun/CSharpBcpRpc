@@ -25,6 +25,8 @@ using com.qifun.jsonStream;
 using com.qifun.jsonStream.rpc;
 using System.Threading;
 using Bcp;
+using System.Diagnostics;
+
 using haxe.root;
 
 namespace BcpRpc
@@ -179,13 +181,15 @@ namespace BcpRpc
                                                 }
                                                 else
                                                 {
-                                                    throw new UnknowServiceName();
+                                                    this.bcpSession.Interrupt();
+                                                    Debug.Fail("Unkown service name");
                                                 }
                                             }
                                         }
                                         else
                                         {
-                                            throw new IllegalRpcData();
+                                            this.bcpSession.Interrupt();
+                                            Debug.Fail("Illegal rpc data!");
                                         }
                                     }
                                 }
@@ -203,6 +207,7 @@ namespace BcpRpc
                                         }
                                         catch (Exception exception)
                                         {
+                                            this.bcpSession.Interrupt();
                                             throw new IllegalRpcData("", exception);
                                         }
                                         IJsonResponseHandler handler;
@@ -214,7 +219,8 @@ namespace BcpRpc
                                             }
                                             else
                                             {
-                                                throw new IllegalRpcData();
+                                                this.bcpSession.Interrupt();
+                                                Debug.Fail("Illegal rpc data!");
                                             }
                                         }
                                         handler.onFailure(idPair.value);
@@ -234,6 +240,7 @@ namespace BcpRpc
                                         }
                                         catch (Exception exception)
                                         {
+                                            this.bcpSession.Interrupt();
                                             throw new IllegalRpcData("", exception);
                                         }
                                         IJsonResponseHandler handler;
@@ -245,7 +252,8 @@ namespace BcpRpc
                                             }
                                             else
                                             {
-                                                throw new IllegalRpcData();
+                                                this.bcpSession.Interrupt();
+                                                Debug.Fail("Illegal rpc data!");
                                             }
                                         }
                                         handler.onSuccess(idPair.value);
@@ -254,19 +262,23 @@ namespace BcpRpc
                                 break;
                             default:
                                 {
-                                    throw new IllegalRpcData();
+                                    this.bcpSession.Interrupt();
+                                    Debug.Fail("Illegal rpc data!");
                                 }
+                                break;
                         }
                     }
                     else
                     {
-                        throw new IllegalRpcData();
+                        this.bcpSession.Interrupt();
+                        Debug.Fail("Illegal rpc data!");
                     }
                 }
             }
             else
             {
-                throw new IllegalRpcData();
+                this.bcpSession.Interrupt();
+                Debug.Fail("Illegal rpc data!");
             }
         }
     }
