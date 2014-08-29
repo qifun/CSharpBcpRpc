@@ -89,7 +89,6 @@ namespace BcpRpc
             else
             {
                 int result = PageSize - current.Count;
-                byte[] bytes = current.ToArray();
                 System.Array.Copy(s.getData(), pos, current.Array, current.Count, result);
                 current = new ArraySegment<byte>(current.Array, 0, current.Count + result);
                 Buffers.RemoveAt(Buffers.Count - 1);

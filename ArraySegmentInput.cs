@@ -48,7 +48,7 @@ namespace BcpRpc
             }
             else
             {
-                var result = current.First();
+                var result = current.Array[current.Offset];
                 current = new ArraySegment<byte>(current.Array, current.Offset + 1, current.Count - 1);
                 if (current.Count == 0)
                 {
@@ -79,8 +79,7 @@ namespace BcpRpc
                 else
                 {
                     int result = current.Count;
-                    byte[] bytes = current.ToArray();
-                    System.Array.Copy(bytes, 0, s.getData(), pos, result);
+                    System.Array.Copy(current.Array, current.Offset, s.getData(), pos, result);
                     if (buffers.MoveNext())
                     {
                         current = buffers.Current;

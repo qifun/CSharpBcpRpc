@@ -25,6 +25,7 @@ using com.qifun.jsonStream;
 using com.qifun.jsonStream.rpc;
 using System.Threading;
 using Bcp;
+using haxe.root;
 
 namespace BcpRpc
 {
@@ -55,8 +56,7 @@ namespace BcpRpc
             }
             catch (Exception e)
             {
-                var current = Encoding.Default.GetString(arraySegmentInput.Current.ToArray());
-                throw new ParseTextException("Parse exception at: " + current, e);
+                throw new ParseTextException("Parse exception: ", e);
             }
             return jsonStream;
         }
@@ -144,31 +144,31 @@ namespace BcpRpc
             return Runtime.genericCast<Element>(Reflect.callMethod(iterator, Reflect.field(iterator, "next"), new Array<object>()));
         }
 
-        private static readonly int JsonStreamObjectIndex = Type.getEnumConstructs(typeof(JsonStream)).indexOf("OBJECT", Null<int>._ofDynamic(0));
+        private static readonly int JsonStreamObjectIndex = haxe.root.Type.getEnumConstructs(typeof(JsonStream)).indexOf("OBJECT", Null<int>._ofDynamic(0));
 
         private void OnReceived(object sender, Bcp.BcpSession.ReceivedEventArgs e)
         {
             var jsonStream = ToJsonStream(e.Buffers);
-            if (Type.enumIndex(jsonStream) == JsonStreamObjectIndex)
+            if (haxe.root.Type.enumIndex(jsonStream) == JsonStreamObjectIndex)
             {
-                var requestOrResponsePairs = Type.enumParameters(jsonStream)[0];
+                var requestOrResponsePairs = haxe.root.Type.enumParameters(jsonStream)[0];
                 while (ReflectHasNext(requestOrResponsePairs))
                 {
                     var requestOrResponsePair = ReflectNext<JsonStreamPair>(requestOrResponsePairs);
-                    if (Type.enumIndex(requestOrResponsePair.value) == JsonStreamObjectIndex)
+                    if (haxe.root.Type.enumIndex(requestOrResponsePair.value) == JsonStreamObjectIndex)
                     {
                         switch (requestOrResponsePair.key)
                         {
                             case "request":
                                 {
-                                    var idPaires = Type.enumParameters(requestOrResponsePair.value)[0];
+                                    var idPaires = haxe.root.Type.enumParameters(requestOrResponsePair.value)[0];
                                     while (ReflectHasNext(idPaires))
                                     {
                                         var idPair = ReflectNext<JsonStreamPair>(idPaires);
                                         var id = idPair.key;
-                                        if (Type.enumIndex(idPair.value) == JsonStreamObjectIndex)
+                                        if (haxe.root.Type.enumIndex(idPair.value) == JsonStreamObjectIndex)
                                         {
-                                            var servicePairs = Type.enumParameters(idPair.value)[0];
+                                            var servicePairs = haxe.root.Type.enumParameters(idPair.value)[0];
                                             while (ReflectHasNext(servicePairs))
                                             {
                                                 var servicePair = ReflectNext<JsonStreamPair>(servicePairs);
@@ -192,7 +192,7 @@ namespace BcpRpc
                                 break;
                             case "failure":
                                 {
-                                    var idPairs = Type.enumParameters(requestOrResponsePair.value)[0];
+                                    var idPairs = haxe.root.Type.enumParameters(requestOrResponsePair.value)[0];
                                     while (ReflectHasNext(idPairs))
                                     {
                                         var idPair = ReflectNext<JsonStreamPair>(idPairs);
@@ -223,7 +223,7 @@ namespace BcpRpc
                                 break;
                             case "success":
                                 {
-                                    var idPairs = Type.enumParameters(requestOrResponsePair.value)[0];
+                                    var idPairs = haxe.root.Type.enumParameters(requestOrResponsePair.value)[0];
                                     while (ReflectHasNext(idPairs))
                                     {
                                         var idPair = ReflectNext<JsonStreamPair>(idPairs);
