@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -182,14 +182,14 @@ namespace BcpRpc
                                                 else
                                                 {
                                                     this.bcpSession.Interrupt();
-                                                    Debug.Fail("Unkown service name");
+                                                    Debug.WriteLine("Unkown service name");
                                                 }
                                             }
                                         }
                                         else
                                         {
                                             this.bcpSession.Interrupt();
-                                            Debug.Fail("Illegal rpc data!");
+                                            Debug.WriteLine("Illegal rpc data!");
                                         }
                                     }
                                 }
@@ -220,7 +220,7 @@ namespace BcpRpc
                                             else
                                             {
                                                 this.bcpSession.Interrupt();
-                                                Debug.Fail("Illegal rpc data!");
+                                                Debug.WriteLine("Illegal rpc data!");
                                             }
                                         }
                                         handler.onFailure(idPair.value);
@@ -253,7 +253,7 @@ namespace BcpRpc
                                             else
                                             {
                                                 this.bcpSession.Interrupt();
-                                                Debug.Fail("Illegal rpc data!");
+                                                Debug.WriteLine("Illegal rpc data!");
                                             }
                                         }
                                         handler.onSuccess(idPair.value);
@@ -263,7 +263,7 @@ namespace BcpRpc
                             default:
                                 {
                                     this.bcpSession.Interrupt();
-                                    Debug.Fail("Illegal rpc data!");
+                                    Debug.WriteLine("Illegal rpc data!");
                                 }
                                 break;
                         }
@@ -271,14 +271,14 @@ namespace BcpRpc
                     else
                     {
                         this.bcpSession.Interrupt();
-                        Debug.Fail("Illegal rpc data!");
+						Debug.WriteLine("Illegal rpc data!");
                     }
                 }
             }
             else
             {
                 this.bcpSession.Interrupt();
-                Debug.Fail("Illegal rpc data!");
+				Debug.WriteLine("Illegal rpc data!");
             }
         }
     }
