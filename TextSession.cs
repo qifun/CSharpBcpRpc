@@ -146,18 +146,18 @@ namespace BcpRpc
             return Runtime.genericCast<Element>(Reflect.callMethod(iterator, Reflect.field(iterator, "next"), new Array<object>()));
         }
 
-        private static readonly int JsonStreamObjectIndex = haxe.root.Type.getEnumConstructs(typeof(JsonStream)).indexOf("OBJECT", Null<int>._ofDynamic(0));
+        private static readonly int jsonStreamObjectIndex = haxe.root.Type.getEnumConstructs(typeof(JsonStream)).indexOf("OBJECT", Null<int>._ofDynamic(0));
 
         private void OnReceived(object sender, Bcp.BcpSession.ReceivedEventArgs e)
         {
             var jsonStream = ToJsonStream(e.Buffers);
-            if (haxe.root.Type.enumIndex(jsonStream) == JsonStreamObjectIndex)
+            if (haxe.root.Type.enumIndex(jsonStream) == jsonStreamObjectIndex)
             {
                 var requestOrResponsePairs = haxe.root.Type.enumParameters(jsonStream)[0];
                 while (ReflectHasNext(requestOrResponsePairs))
                 {
                     var requestOrResponsePair = ReflectNext<JsonStreamPair>(requestOrResponsePairs);
-                    if (haxe.root.Type.enumIndex(requestOrResponsePair.value) == JsonStreamObjectIndex)
+                    if (haxe.root.Type.enumIndex(requestOrResponsePair.value) == jsonStreamObjectIndex)
                     {
                         switch (requestOrResponsePair.key)
                         {
@@ -168,7 +168,7 @@ namespace BcpRpc
                                     {
                                         var idPair = ReflectNext<JsonStreamPair>(idPaires);
                                         var id = idPair.key;
-                                        if (haxe.root.Type.enumIndex(idPair.value) == JsonStreamObjectIndex)
+                                        if (haxe.root.Type.enumIndex(idPair.value) == jsonStreamObjectIndex)
                                         {
                                             var servicePairs = haxe.root.Type.enumParameters(idPair.value)[0];
                                             while (ReflectHasNext(servicePairs))
