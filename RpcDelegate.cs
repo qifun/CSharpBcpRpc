@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using com.qifun.jsonStream.rpc;
 
-namespace BcpRpc
+namespace Qifun.BcpRpc
 {
     public class RpcDelegate
     {

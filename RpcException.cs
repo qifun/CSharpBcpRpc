@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BcpRpc
+namespace Qifun.BcpRpc
 {
     public abstract class RpcException : Exception
     {

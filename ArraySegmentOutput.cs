@@ -22,7 +22,7 @@ using System.Text;
 using haxe.io;
 using haxe.lang;
 
-namespace BcpRpc
+namespace Qifun.BcpRpc
 {
     internal class ArraySegmentOutput : Output
     {

@@ -24,12 +24,12 @@ using com.qifun.jsonStream.io;
 using com.qifun.jsonStream;
 using com.qifun.jsonStream.rpc;
 using System.Threading;
-using Bcp;
+using Qifun.Bcp;
 using System.Diagnostics;
 
 using haxe.root;
 
-namespace BcpRpc
+namespace Qifun.BcpRpc
 {
     public abstract class TextSession<BcpSession> : RpcSession<BcpSession> where BcpSession : Bcp.BcpSession
     {
