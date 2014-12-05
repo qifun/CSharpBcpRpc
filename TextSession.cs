@@ -74,6 +74,14 @@ namespace Qifun.BcpRpc
                 this.textSession = textSession;
             }
 
+            public void push(JsonStream data)
+            {
+                var pushStream = JsonStream.OBJECT(Generator1(new JsonStreamPair(
+                    "push",
+                    JsonStream.OBJECT(Generator1(new JsonStreamPair(serviceClassName, data))))));
+                textSession.bcpSession.Send(textSession.ToByteBuffer(pushStream));
+            }
+
             public void apply(JsonStream request, IJsonResponseHandler handler)
             {
                 int requestId = Interlocked.Increment(ref textSession.nextRequestId);
@@ -161,6 +169,25 @@ namespace Qifun.BcpRpc
                     {
                         switch (requestOrResponsePair.key)
                         {
+                            case "push":
+                                {
+                                    var servicePairs = haxe.root.Type.enumParameters(requestOrResponsePair.value)[0];
+                                    while (ReflectHasNext(servicePairs))
+                                    {
+                                        var servicePair = ReflectNext<JsonStreamPair>(servicePairs);
+                                        RpcDelegate.IncomingProxyCallback<RpcSession<BcpSession>> incomingRpc;
+                                        if (IncomingServices.incomingProxyMap.TryGetValue(servicePair.key, out incomingRpc))
+                                        {
+                                            incomingRpc(this).push(servicePair.value);
+                                        }
+                                        else
+                                        {
+                                            this.bcpSession.Interrupt();
+                                            Debug.WriteLine("Unkown service name");
+                                        }
+                                    }
+                                }
+                                break;
                             case "request":
                                 {
                                     var idPaires = haxe.root.Type.enumParameters(requestOrResponsePair.value)[0];
