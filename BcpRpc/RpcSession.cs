@@ -107,16 +107,16 @@ namespace Qifun.BcpRpc
                 this.rpcSession = rpcSession;
             }
 
-            internal sealed class ResponseHandler : IResponseHandler
+            internal sealed class ResponseHandler<TResponseMessage> : IResponseHandler
             {
-                public ResponseHandler(Type responseType, Action<IMessage> successCallback, Action<IMessage> failCallback)
+                public ResponseHandler(Type responseType, Action<TResponseMessage> successCallback, Action<IMessage> failCallback)
                 {
                     this.responseType = responseType;
                     this.successCallback = successCallback;
                     this.failCallback = failCallback;
                 }
 
-                private readonly Action<IMessage> successCallback;
+                private readonly Action<TResponseMessage> successCallback;
                 private readonly Action<IMessage> failCallback;
                 private readonly Type responseType;
 
@@ -124,7 +124,7 @@ namespace Qifun.BcpRpc
 
                 public void OnSuccess(IMessage message)
                 {
-                    successCallback(message);
+                    successCallback((TResponseMessage)message);
                 }
 
                 public void OnFailure(IMessage message)
@@ -133,7 +133,7 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            public void SendRequest<TResponseMessage>(IMessage message, Action<IMessage> successCallback, Action<IMessage> failCallback) 
+            public void SendRequest<TResponseMessage>(IMessage message, Action<TResponseMessage> successCallback, Action<IMessage> failCallback) 
                 where TResponseMessage : IMessage
             {
                 Type responseType = typeof(TResponseMessage);
@@ -142,7 +142,7 @@ namespace Qifun.BcpRpc
                 {
                     if(!outgoingRpcResponseHandlers.ContainsKey(messageId))
                     {
-                        var responseHandler = new ResponseHandler(responseType, successCallback, failCallback);
+                        var responseHandler = new ResponseHandler<TResponseMessage>(responseType, successCallback, failCallback);
                         outgoingRpcResponseHandlers.Add(messageId, responseHandler);
                         rpcSession.SendMessage(BcpRpc.REQUEST, messageId, message);
                     }

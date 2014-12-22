@@ -52,7 +52,6 @@
     <Compile Include="RpcDelegate.cs" />
     <Compile Include="RpcException.cs" />
     <Compile Include="RpcSession.cs" />
-    <Compile Include="TextSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
