@@ -15,18 +15,22 @@
  * limitations under the License.
  */
 
+using Google.ProtocolBuffers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using com.qifun.jsonStream.rpc;
 
 namespace Qifun.BcpRpc
 {
     public class RpcDelegate
     {
-        public delegate IJsonService IncomingProxyCallback<Session>(Session session);
+        public delegate IMessage RequestCallback(IMessage message, IRpcService service);
 
-        public delegate Service OutgoingCallback<Service>(IJsonService jsonService);
+        public delegate void InfoCallback(IMessage message, IRpcService service);
+
+        public delegate void EventCallback(IMessage message, IRpcService service);
+
+        public delegate void CastRequestCallback(IMessage message, IRpcService service);
     }
 }

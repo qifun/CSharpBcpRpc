@@ -19,18 +19,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using haxe.io;
-using haxe.lang;
 
 namespace Qifun.BcpRpc
 {
-    internal class ArraySegmentOutput : Output
+    internal class ArraySegmentOutput
     {
         private static int PageSize = 128;
 
         public IList<ArraySegment<byte>> Buffers = new System.Collections.Generic.List<ArraySegment<byte>>();
 
-        public override void writeByte(int c)
+        public void WriteByte(int c)
         {
             ArraySegment<byte> current;
             if (Buffers.Count == 0)
@@ -57,7 +55,13 @@ namespace Qifun.BcpRpc
             Buffers.Add(newLast);
         }
 
-        public override int writeBytes(Bytes s, int pos, int len)
+        public void WriteInt(int i)
+        {
+            byte[] intBytes = BitConverter.GetBytes(i);
+            WriteBytes(intBytes, 0, intBytes.Length);
+        }
+
+        public int WriteBytes(byte[] s, int pos, int len)
         {
             ArraySegment<byte> current;
             if (Buffers.Count == 0)
@@ -80,7 +84,7 @@ namespace Qifun.BcpRpc
             }
             if (len <= PageSize - current.Count)
             {
-                System.Array.Copy(s.getData(), pos, current.Array, current.Count, len);
+                System.Array.Copy(s, pos, current.Array, current.Count, len);
                 current = new ArraySegment<byte>(current.Array, 0, current.Count + len);
                 Buffers.RemoveAt(Buffers.Count - 1);
                 Buffers.Add(current);
@@ -89,7 +93,7 @@ namespace Qifun.BcpRpc
             else
             {
                 int result = PageSize - current.Count;
-                System.Array.Copy(s.getData(), pos, current.Array, current.Count, result);
+                System.Array.Copy(s, pos, current.Array, current.Count, result);
                 current = new ArraySegment<byte>(current.Array, 0, current.Count + result);
                 Buffers.RemoveAt(Buffers.Count - 1);
                 Buffers.Add(current);

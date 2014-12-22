@@ -19,12 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using haxe.io;
-using haxe.lang;
 
 namespace Qifun.BcpRpc
 {
-    internal class ArraySegmentInput : Input
+    internal class ArraySegmentInput
     {
         private IEnumerator<ArraySegment<Byte>> buffers;
         private ArraySegment<Byte> current = new ArraySegment<byte>();
@@ -40,11 +38,11 @@ namespace Qifun.BcpRpc
             }
         }
 
-        public override int readByte()
+        public int ReadByte()
         {
             if (current.Count == 0)
             {
-                throw HaxeException.wrap(new Eof());
+                throw new RpcEofException();
             }
             else
             {
@@ -61,25 +59,29 @@ namespace Qifun.BcpRpc
             }
         }
 
-        public override int readBytes(Bytes s, int pos, int len)
+        public int ReadInt()
+        {
+            return (ReadByte() << 24) | (ReadByte() << 16) | (ReadByte() << 8) | ReadByte();
+        }
+
+        public int ReadBytes(byte[] s, int pos, int len)
         {
             if (current.Count == 0)
             {
-                throw HaxeException.wrap(new Eof());
+                throw new RpcEofException();
             }
             else
             {
                 if (len < current.Count)
                 {
-                    byte[] bytes = (new ArraySegment<byte>(current.Array, current.Offset, len)).Array;
-                    System.Array.Copy(bytes, 0, s.getData(), pos, len);
+                    System.Array.Copy(Current.Array, Current.Offset, s, pos, len);
                     current = new ArraySegment<byte>(current.Array, current.Offset + len, current.Count - len);
                     return len;
                 }
                 else
                 {
                     int result = current.Count;
-                    System.Array.Copy(current.Array, current.Offset, s.getData(), pos, result);
+                    System.Array.Copy(current.Array, current.Offset, s, pos, result);
                     if (buffers.MoveNext())
                     {
                         current = buffers.Current;
@@ -92,5 +94,6 @@ namespace Qifun.BcpRpc
                 }
             }
         }
+
     }
 }

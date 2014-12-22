@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Qifun.BcpRpc</RootNamespace>
     <AssemblyName>Qifun.BcpRpc.dll</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -31,30 +31,41 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.ProtocolBuffers, Version=2.4.1.521, Culture=neutral, PublicKeyToken=55f7125234beb589, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Protobuf\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArraySegmentInput.cs" />
     <Compile Include="ArraySegmentOutput.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BcpRpc.cs" />
+    <Compile Include="ErrorCode.cs" />
+    <Compile Include="IResponseHandler.cs" />
+    <Compile Include="IRpcService.cs" />
     <Compile Include="RpcDelegate.cs" />
     <Compile Include="RpcException.cs" />
     <Compile Include="RpcSession.cs" />
     <Compile Include="TextSession.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\csharp-bcp\csharp-bcp.csproj">
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Protobuf\Google.ProtocolBuffers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CSharpBcp\Bcp\Bcp.csproj">
       <Project>{fbc8c692-fa6b-46af-93de-9ce1bedbe1db}</Project>
-      <Name>csharp-bcp</Name>
+      <Name>Bcp</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

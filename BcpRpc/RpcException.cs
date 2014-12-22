@@ -53,4 +53,11 @@ namespace Qifun.BcpRpc
         }
     }
     
+    public class RpcEofException: RpcException
+    {
+        public RpcEofException(string message = null, Exception cause = null)
+            : base(message, cause)
+        {
+        }
+    }
 }
