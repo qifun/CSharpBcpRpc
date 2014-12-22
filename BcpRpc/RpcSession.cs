@@ -203,7 +203,7 @@ namespace Qifun.BcpRpc
             }
             else
             {
-                return (IMessage)Activator.CreateInstance(messageType);
+                return (IMessage)messageType.GetProperty("DefaultInstance").GetValue(null, null);
             }
         }
 
