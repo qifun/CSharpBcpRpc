@@ -219,10 +219,18 @@ namespace Qifun.BcpRpc
             {
                 if (service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
                 {
-                    var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                    messageEntry.ExecuteMessage(message, service);
+                    try
+                    {
+                        var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
+                        messageEntry.ExecuteMessage(message, service);
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.WriteLine("Handle Message Failed: " + exception.StackTrace);
+                    }
                 }
                 else
+
                 {
                     this.bcpSession.Interrupt();
                     Debug.WriteLine("Illegal RPC data!");
@@ -257,8 +265,21 @@ namespace Qifun.BcpRpc
                             if(service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
                             {
                                 var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                                messageEntry.ExecuteRequest(message, service);
-                                // TODO Handle response
+                                try
+                                {
+                                    var responseMessage = messageEntry.ExecuteRequest(message, service);
+                                    SendMessage(BcpRpc.SUCCESS, messageId, responseMessage);
+                                }
+                                catch(ErrorCode exception)
+                                {
+                                    var errorMessage = exception.ProtobufMessage;
+                                    SendMessage(BcpRpc.FAIL, messageId, errorMessage);
+                                }
+                                catch(Exception exception)
+                                {
+                                    this.bcpSession.Interrupt();
+                                    Debug.WriteLine("Handle request fail: " + exception.StackTrace);
+                                }
                             }
                             else
                             {
@@ -293,9 +314,16 @@ namespace Qifun.BcpRpc
                         IResponseHandler handler;
                         if(outgoingProxy.outgoingRpcResponseHandlers.TryGetValue(messageId, out handler))
                         {
-                            outgoingProxy.outgoingRpcResponseHandlers.Remove(messageId);
-                            var message = BytesToMessage(input, handler.ResponseType, messageSize);
-                            handler.OnSuccess(message);
+                            try
+                            {
+                                outgoingProxy.outgoingRpcResponseHandlers.Remove(messageId);
+                                var message = BytesToMessage(input, handler.ResponseType, messageSize);
+                                handler.OnSuccess(message);
+                            }
+                            catch (Exception exception)
+                            {
+                                Debug.WriteLine("Handle request fail: " + exception.StackTrace);
+                            }
                         }
                         else
                         {
@@ -313,8 +341,15 @@ namespace Qifun.BcpRpc
                             Type errorType;
                             if (ErrorCodes.ErrorCodeMap.TryGetValue(messageName, out errorType))
                             {
-                                var message = (IMessage)errorType.GetProperty("DefaultInstance").GetValue(null, null);
-                                handler.OnFailure(message);
+                                try
+                                {
+                                    var message = (IMessage)errorType.GetProperty("DefaultInstance").GetValue(null, null);
+                                    handler.OnFailure(message);
+                                }
+                                catch (Exception exception)
+                                {
+                                    Debug.WriteLine("Handle request fail: " + exception.StackTrace);
+                                }
                             }
                             else
                             {
