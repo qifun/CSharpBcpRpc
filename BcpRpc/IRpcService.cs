@@ -26,18 +26,26 @@ namespace Qifun.BcpRpc
     public abstract class IRpcService
     {
 
-        public sealed class IncomingRequestEntry : IncomingEntry
+        public sealed class IncomingRequestEntry<TRequestMessage, TResponseMessage, TService> : IncomingEntry
+            where TRequestMessage : IMessage
+            where TResponseMessage : IMessage
+            where TService : IRpcService
         {
-            private readonly RpcDelegate.RequestCallback requestCallback;
-            public RpcDelegate.RequestCallback RequestCallback { get { return requestCallback; } }
+            private readonly RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback;
+            public RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> RequestCallback { get { return requestCallback; } }
 
-            public IncomingRequestEntry(Type messageType, RpcDelegate.RequestCallback requestCallback)
-                : base(messageType)
+            public IncomingRequestEntry(RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback)
+                : base(typeof(TRequestMessage))
             {
                 this.requestCallback = requestCallback;
             }
 
-            public override void executeMessage(IMessage message, IRpcService service)
+            public override IMessage ExecuteRequest(IMessage message, IRpcService service)
+            {
+                return requestCallback((TRequestMessage)message, (TService)service);
+            }
+
+            public override void ExecuteMessage(IMessage message, IRpcService service)
             {
                 throw new NotImplementedException();
             }
@@ -57,7 +65,12 @@ namespace Qifun.BcpRpc
                 this.messageCallback = messageCallback;
             }
 
-            public override void executeMessage(IMessage message, IRpcService service)
+            public override IMessage ExecuteRequest(IMessage message, IRpcService service)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void ExecuteMessage(IMessage message, IRpcService service)
             {
                 messageCallback(message, service);
             }
@@ -73,7 +86,10 @@ namespace Qifun.BcpRpc
             private readonly Type messageType;
             public Type MessageType { get { return messageType; } }
 
-            public abstract void executeMessage(IMessage message, IRpcService service);
+            public abstract IMessage ExecuteRequest(IMessage message, IRpcService service);
+
+            public abstract void ExecuteMessage(IMessage message, IRpcService service);
+
         }
 
         public sealed class IncomingMessageRegistration

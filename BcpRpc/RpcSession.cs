@@ -220,7 +220,7 @@ namespace Qifun.BcpRpc
                 if (service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
                 {
                     var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                    messageEntry.executeMessage(message, service);
+                    messageEntry.ExecuteMessage(message, service);
                 }
                 else
                 {
@@ -257,7 +257,7 @@ namespace Qifun.BcpRpc
                             if(service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
                             {
                                 var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                                ((IRpcService.IncomingRequestEntry)messageEntry).RequestCallback(message, service);
+                                messageEntry.ExecuteRequest(message, service);
                                 // TODO Handle response
                             }
                             else
