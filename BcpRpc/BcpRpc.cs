@@ -22,7 +22,7 @@ using System.Text;
 
 namespace Qifun.BcpRpc
 {
-    public class BcpRpc
+    internal sealed class BcpRpc
     {
         internal const int REQUEST = 0;
         

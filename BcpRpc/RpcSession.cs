@@ -36,8 +36,11 @@ namespace Qifun.BcpRpc
             this.bcpSession = bcpSession;
             this.bcpSession.Received += OnReceived;
         }
-        public readonly Bcp.BcpSession bcpSession;
-        public readonly OutgoingProxy outgoingProxy;
+        private readonly Bcp.BcpSession bcpSession;
+        private readonly OutgoingProxy outgoingProxy;
+
+        public Bcp.BcpSession Session { get { return bcpSession; } }
+        public OutgoingProxy OutgoingService { get { return outgoingProxy; } }
 
         public sealed class IncomingProxyEntry<TService> where TService : IRpcService
         {

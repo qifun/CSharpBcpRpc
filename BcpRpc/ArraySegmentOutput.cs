@@ -22,7 +22,7 @@ using System.Text;
 
 namespace Qifun.BcpRpc
 {
-    internal class ArraySegmentOutput
+    internal sealed class ArraySegmentOutput
     {
         private static int PageSize = 128;
 

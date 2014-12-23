@@ -23,12 +23,12 @@ using System.Text;
 
 namespace Qifun.BcpRpc
 {
-    public class RpcDelegate
+    public sealed class RpcDelegate
     {
         public delegate IMessage RequestCallback(IMessage message, IRpcService service);
 
         /// <summary>
-        ///  Callback for Event, Info or C
+        ///  Callback for Event, Info and CastRequest
         /// </summary>
         /// <typeparam name="TMessage"></typeparam>
         /// <typeparam name="TService"></typeparam>

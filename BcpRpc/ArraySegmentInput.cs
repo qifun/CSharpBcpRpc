@@ -22,7 +22,7 @@ using System.Text;
 
 namespace Qifun.BcpRpc
 {
-    internal class ArraySegmentInput
+    internal sealed class ArraySegmentInput
     {
         private IEnumerator<ArraySegment<Byte>> buffers;
         private ArraySegment<Byte> current = new ArraySegment<byte>();
