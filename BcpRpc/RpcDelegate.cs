@@ -27,10 +27,15 @@ namespace Qifun.BcpRpc
     {
         public delegate IMessage RequestCallback(IMessage message, IRpcService service);
 
-        public delegate void InfoCallback(IMessage message, IRpcService service);
+        /// <summary>
+        ///  Callback for Event, Info or C
+        /// </summary>
+        /// <typeparam name="TMessage"></typeparam>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="message"></param>
+        /// <param name="service"></param>
+        public delegate void MessageCallback<TMessage, TService>(IMessage message, IRpcService service)
+            where TMessage : IMessage where TService : IRpcService;
 
-        public delegate void EventCallback(IMessage message, IRpcService service);
-
-        public delegate void CastRequestCallback(IMessage message, IRpcService service);
     }
 }

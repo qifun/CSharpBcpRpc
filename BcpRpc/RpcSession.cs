@@ -75,13 +75,13 @@ namespace Qifun.BcpRpc
             get;
         }
 
-        public sealed class ErrorCodeRgistration
+        public sealed class ErrorCodeRegistration
         {
             private readonly Dictionary<string, Type> errorCodeMap = new Dictionary<string, Type>();
 
             public Dictionary<string, Type> ErrorCodeMap { get { return errorCodeMap; } }
 
-            public ErrorCodeRgistration(params Type[] errorCodes)
+            public ErrorCodeRegistration(params Type[] errorCodes)
             {
                 foreach(var errorCode in errorCodes)
                 {
@@ -90,7 +90,7 @@ namespace Qifun.BcpRpc
             }
         }
 
-        protected abstract ErrorCodeRgistration ErrorCodes
+        protected abstract ErrorCodeRegistration ErrorCodes
         {
             get;
         }
@@ -207,6 +207,31 @@ namespace Qifun.BcpRpc
             }
         }
 
+        // Handle Event, Info and CastRequest
+        private void HandleMessage(ArraySegmentInput input, string messageName, string packageName, int messageSize)
+        {
+            IRpcService service;
+            IRpcService.IncomingEntry messageEntry;
+            if (IncomingServices.IncomingProxyMap.TryGetValue(packageName, out service))
+            {
+                if (service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
+                {
+                    var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
+                    messageEntry.executeMessage(message, service);
+                }
+                else
+                {
+                    this.bcpSession.Interrupt();
+                    Debug.WriteLine("Illegal RPC data!");
+                }
+            }
+            else
+            {
+                this.bcpSession.Interrupt();
+                Debug.WriteLine("Illegal RPC data!");
+            }
+        }
+
         private void OnReceived(object sender, Bcp.BcpSession.ReceivedEventArgs e)
         {
             var input = new ArraySegmentInput(e.Buffers);
@@ -219,7 +244,7 @@ namespace Qifun.BcpRpc
             var messageName = Encoding.UTF8.GetString(messageNameBytes);
             var packageName = messageName.Substring(0, messageName.LastIndexOf('.'));
             IRpcService service;
-            IRpcService.IncomingMessageEntry messageEntry;
+            IRpcService.IncomingEntry messageEntry;
             switch(messageType)
             {
                 case BcpRpc.REQUEST:
@@ -229,7 +254,7 @@ namespace Qifun.BcpRpc
                             if(service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
                             {
                                 var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                                messageEntry.RequestCallback(message, service);
+                                ((IRpcService.IncomingRequestEntry)messageEntry).RequestCallback(message, service);
                                 // TODO Handle response
                             }
                             else
@@ -247,53 +272,17 @@ namespace Qifun.BcpRpc
                     }
                 case BcpRpc.CASTREQUEST:
                     {
-                        // Handle cast request
+                        HandleMessage(input, messageName, packageName, messageSize);
                         break;
                     }
                 case BcpRpc.EVENT:
                     {
-                        if(IncomingServices.IncomingProxyMap.TryGetValue(packageName, out service))
-                        {
-                            if(service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
-                            {
-                                var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                                messageEntry.EvnetCallback(message, service);
-                                // TODO Handle response
-                            }
-                            else
-                            {
-                                this.bcpSession.Interrupt();
-                                Debug.WriteLine("Illegal RPC data!");
-                            }
-                        }
-                        else
-                        {
-                            this.bcpSession.Interrupt();
-                            Debug.WriteLine("Illegal RPC data!");
-                        }
+                        HandleMessage(input, messageName, packageName, messageSize);
                         break;
                     }
                 case BcpRpc.INFO:
                     {
-                        if(IncomingServices.IncomingProxyMap.TryGetValue(packageName, out service))
-                        {
-                            if(service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
-                            {
-                                var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                                messageEntry.InfoCallback(message, service);
-                                // TODO Handle response
-                            }
-                            else
-                            {
-                                this.bcpSession.Interrupt();
-                                Debug.WriteLine("Illegal RPC data!");
-                            }
-                        }
-                        else
-                        {
-                            this.bcpSession.Interrupt();
-                            Debug.WriteLine("Illegal RPC data!");
-                        }
+                        HandleMessage(input, messageName, packageName, messageSize);
                         break;
                     }
                 case BcpRpc.SUCCESS:
@@ -321,7 +310,7 @@ namespace Qifun.BcpRpc
                             Type errorType;
                             if (ErrorCodes.ErrorCodeMap.TryGetValue(messageName, out errorType))
                             {
-                                var message = (IMessage)Activator.CreateInstance(errorType);
+                                var message = (IMessage)errorType.GetProperty("DefaultInstance").GetValue(null, null);
                                 handler.OnFailure(message);
                             }
                             else

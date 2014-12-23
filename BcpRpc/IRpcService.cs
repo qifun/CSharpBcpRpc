@@ -9,58 +9,63 @@ namespace Qifun.BcpRpc
     public abstract class IRpcService
     {
 
-        public sealed class IncomingMessageEntry
+        public sealed class IncomingRequestEntry : IncomingEntry
         {
-            private readonly Type messageType;
             private readonly RpcDelegate.RequestCallback requestCallback;
-            private readonly RpcDelegate.InfoCallback infoCallback;
-            private readonly RpcDelegate.EventCallback eventCallback;
-            private readonly RpcDelegate.CastRequestCallback castRequestCallback;
-            private readonly int incomingMessageType;
-
-            public Type MessageType { get { return messageType; } }
             public RpcDelegate.RequestCallback RequestCallback { get { return requestCallback; } }
-            public RpcDelegate.InfoCallback InfoCallback { get { return infoCallback; } }
-            public RpcDelegate.EventCallback  EvnetCallback { get { return eventCallback; } }
-            public RpcDelegate.CastRequestCallback CastRequestCallback { get { return castRequestCallback; } }
-            public int IncomingMessageType { get { return incomingMessageType; } }
 
-            public IncomingMessageEntry(Type messageType, RpcDelegate.RequestCallback requestCallback)
+            public IncomingRequestEntry(Type messageType, RpcDelegate.RequestCallback requestCallback)
+                : base(messageType)
             {
-                this.messageType = messageType;
                 this.requestCallback = requestCallback;
-                this.incomingMessageType = BcpRpc.REQUEST;
             }
 
-            public IncomingMessageEntry(Type messageType, RpcDelegate.InfoCallback infoCallback)
+            public override void executeMessage(IMessage message, IRpcService service)
             {
-                this.messageType = messageType;
-                this.infoCallback = infoCallback;
-                this.incomingMessageType = BcpRpc.INFO;
+                throw new NotImplementedException();
+            }
+        }
+
+        // For Event, Info and CastRequest
+        public sealed class IncomingMessageEntry<TMessage, TService> : IncomingEntry
+            where TMessage : IMessage where TService : IRpcService
+        {
+            private readonly RpcDelegate.MessageCallback<TMessage, TService> messageCallback;
+
+            public RpcDelegate.MessageCallback<TMessage, TService> MessageCallback { get { return messageCallback; } }
+
+            public IncomingMessageEntry(RpcDelegate.MessageCallback<TMessage, TService> messageCallback)
+                : base(typeof(TMessage))
+            {
+                this.messageCallback = messageCallback;
             }
 
-            public IncomingMessageEntry(Type messageType, RpcDelegate.EventCallback eventCallback)
+            public override void executeMessage(IMessage message, IRpcService service)
             {
-                this.messageType = messageType;
-                this.eventCallback = eventCallback;
-                this.incomingMessageType = BcpRpc.EVENT;
+                messageCallback(message, service);
             }
 
-            public IncomingMessageEntry(Type messageType, RpcDelegate.CastRequestCallback castRequestCallback)
+        }
+
+        public abstract class IncomingEntry {
+            public IncomingEntry(Type messageType)
             {
                 this.messageType = messageType;
-                this.castRequestCallback = castRequestCallback;
-                this.incomingMessageType = BcpRpc.CASTREQUEST;
             }
+            
+            private readonly Type messageType;
+            public Type MessageType { get { return messageType; } }
+
+            public abstract void executeMessage(IMessage message, IRpcService service);
         }
 
         public sealed class IncomingMessageRegistration
         {
-            private readonly Dictionary<string, IncomingMessageEntry> incomingMessageMap = new Dictionary<string, IncomingMessageEntry>();
+            private readonly Dictionary<string, IncomingEntry> incomingMessageMap = new Dictionary<string, IncomingEntry>();
 
-            internal Dictionary<string, IncomingMessageEntry> IncomingMessageMap { get { return incomingMessageMap; } }
+            internal Dictionary<string, IncomingEntry> IncomingMessageMap { get { return incomingMessageMap; } }
 
-            public IncomingMessageRegistration(params IncomingMessageEntry[] incomingMessages)
+            public IncomingMessageRegistration(params IncomingEntry[] incomingMessages)
             {
                 foreach(var incomingMessage in incomingMessages)
                 {
