@@ -30,11 +30,7 @@ namespace Qifun.BcpRpc
         
         internal const int FAIL = 2;
 
-        internal const int EVENT = 3;
-
-        internal const int INFO = 4;
-
-        internal const int CASTREQUEST = 5;
+        internal const int PUSHMESSAGE = 3;
 
     }
 }

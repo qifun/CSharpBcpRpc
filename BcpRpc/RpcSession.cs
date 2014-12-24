@@ -156,24 +156,11 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            public void SendEvent(IMessage eventMessage)
+            public void PushMessage(IMessage eventMessage)
             {
                 int messageId = Interlocked.Increment(ref nextMessageId);
-                rpcSession.SendMessage(BcpRpc.EVENT, messageId, eventMessage);
+                rpcSession.SendMessage(BcpRpc.PUSHMESSAGE, messageId, eventMessage);
             }
-
-            public void SendInfo(IMessage info)
-            {
-                int messageId = Interlocked.Increment(ref nextMessageId);
-                rpcSession.SendMessage(BcpRpc.INFO, messageId, info);
-            }
-
-            public void SendCastRequest(IMessage castRequest)
-            {
-                int messageId = Interlocked.Increment(ref nextMessageId);
-                rpcSession.SendMessage(BcpRpc.CASTREQUEST, messageId, castRequest);
-            }
-
 
         }
 
@@ -207,39 +194,6 @@ namespace Qifun.BcpRpc
             else
             {
                 return (IMessage)messageType.GetProperty("DefaultInstance").GetValue(null, null);
-            }
-        }
-
-        // Handle Event, Info and CastRequest
-        private void HandleMessage(ArraySegmentInput input, string messageName, string packageName, int messageSize)
-        {
-            IRpcService service;
-            IRpcService.IncomingEntry messageEntry;
-            if (IncomingServices.IncomingProxyMap.TryGetValue(packageName, out service))
-            {
-                if (service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
-                {
-                    try
-                    {
-                        var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                        messageEntry.ExecuteMessage(message, service);
-                    }
-                    catch (Exception exception)
-                    {
-                        Debug.WriteLine("Handle Message Failed: " + exception.StackTrace);
-                    }
-                }
-                else
-
-                {
-                    this.bcpSession.Interrupt();
-                    Debug.WriteLine("Illegal RPC data!");
-                }
-            }
-            else
-            {
-                this.bcpSession.Interrupt();
-                Debug.WriteLine("Illegal RPC data!");
             }
         }
 
@@ -294,19 +248,33 @@ namespace Qifun.BcpRpc
                         }
                         break;
                     }
-                case BcpRpc.CASTREQUEST:
+                case BcpRpc.PUSHMESSAGE:
                     {
-                        HandleMessage(input, messageName, packageName, messageSize);
-                        break;
-                    }
-                case BcpRpc.EVENT:
-                    {
-                        HandleMessage(input, messageName, packageName, messageSize);
-                        break;
-                    }
-                case BcpRpc.INFO:
-                    {
-                        HandleMessage(input, messageName, packageName, messageSize);
+                        if (IncomingServices.IncomingProxyMap.TryGetValue(packageName, out service))
+                        {
+                            if (service.IncomingMessages.IncomingMessageMap.TryGetValue(messageName, out messageEntry))
+                            {
+                                try
+                                {
+                                    var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
+                                    messageEntry.ExecuteMessage(message, service);
+                                }
+                                catch (Exception exception)
+                                {
+                                    Debug.WriteLine("Handle Message Failed: " + exception.StackTrace);
+                                }
+                            }
+                            else
+                            {
+                                this.bcpSession.Interrupt();
+                                Debug.WriteLine("Illegal RPC data!");
+                            }
+                        }
+                        else
+                        {
+                            this.bcpSession.Interrupt();
+                            Debug.WriteLine("Illegal RPC data!");
+                        }
                         break;
                     }
                 case BcpRpc.SUCCESS:
