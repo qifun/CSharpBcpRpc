@@ -25,6 +25,21 @@ namespace Qifun.BcpRpc
 {
     public abstract class IRpcService
     {
+        public abstract class IncomingEntry
+        {
+            public IncomingEntry(Type messageType)
+            {
+                this.messageType = messageType;
+            }
+
+            private readonly Type messageType;
+            public Type MessageType { get { return messageType; } }
+
+            public abstract IMessage ExecuteRequest(IMessage message, IRpcService service);
+
+            public abstract void ExecuteMessage(IMessage message, IRpcService service);
+
+        }
 
         public sealed class IncomingRequestEntry<TRequestMessage, TResponseMessage, TService> : IncomingEntry
             where TRequestMessage : IMessage
@@ -76,20 +91,6 @@ namespace Qifun.BcpRpc
 
         }
 
-        public abstract class IncomingEntry {
-            public IncomingEntry(Type messageType)
-            {
-                this.messageType = messageType;
-            }
-            
-            private readonly Type messageType;
-            public Type MessageType { get { return messageType; } }
-
-            public abstract IMessage ExecuteRequest(IMessage message, IRpcService service);
-
-            public abstract void ExecuteMessage(IMessage message, IRpcService service);
-
-        }
 
         public sealed class IncomingMessageRegistration
         {

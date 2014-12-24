@@ -42,15 +42,15 @@ namespace Qifun.BcpRpc
         public Bcp.BcpSession Session { get { return bcpSession; } }
         public OutgoingProxy OutgoingService { get { return outgoingProxy; } }
 
-        public sealed class IncomingProxyEntry<TService> where TService : IRpcService
+        public sealed class IncomingProxyEntry
         {
             private string module;
-            private TService incomingService;
+            private IRpcService incomingService;
 
             internal string Module { get { return module; } }
-            internal TService IncomingService { get { return incomingService; } }
+            internal IRpcService IncomingService { get { return incomingService; } }
 
-            public IncomingProxyEntry(string module, TService incomingService)
+            public IncomingProxyEntry(string module, IRpcService incomingService)
             {
                 this.module = module;
                 this.incomingService = incomingService;
@@ -64,7 +64,7 @@ namespace Qifun.BcpRpc
 
             public Dictionary<string, IRpcService> IncomingProxyMap { get { return incomingProxyMap; } }
 
-            public IncomingProxyRegistration(params IncomingProxyEntry<IRpcService>[] incomingEntries)
+            public IncomingProxyRegistration(params IncomingProxyEntry[] incomingEntries)
             {
                 foreach (var entry in incomingEntries)
                 {
