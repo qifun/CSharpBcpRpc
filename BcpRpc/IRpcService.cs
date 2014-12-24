@@ -51,7 +51,6 @@ namespace Qifun.BcpRpc
             }
         }
 
-        // For Event, Info and CastRequest
         public sealed class IncomingMessageEntry<TMessage, TService> : IncomingEntry
             where TMessage : IMessage where TService : IRpcService
         {
