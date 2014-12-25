@@ -47,7 +47,6 @@ namespace Qifun.BcpRpc
             where TService : IRpcService
         {
             private readonly RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback;
-            public RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> RequestCallback { get { return requestCallback; } }
 
             public IncomingRequestEntry(RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback)
                 : base(typeof(TRequestMessage))
@@ -70,8 +69,6 @@ namespace Qifun.BcpRpc
             where TMessage : IMessage where TService : IRpcService
         {
             private readonly RpcDelegate.MessageCallback<TMessage, TService> messageCallback;
-
-            public RpcDelegate.MessageCallback<TMessage, TService> MessageCallback { get { return messageCallback; } }
 
             public IncomingMessageEntry(RpcDelegate.MessageCallback<TMessage, TService> messageCallback)
                 : base(typeof(TMessage))
