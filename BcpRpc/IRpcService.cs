@@ -41,13 +41,14 @@ namespace Qifun.BcpRpc
 
         }
 
-        public sealed class IncomingRequestEntry<TRequestMessage, TService> : IncomingEntry
+        public sealed class IncomingRequestEntry<TRequestMessage, TResponseMessage, TService> : IncomingEntry
             where TRequestMessage : IMessage
+            where TResponseMessage : IMessage
             where TService : IRpcService
         {
-            private readonly RpcDelegate.RequestCallback<TRequestMessage, TService> requestCallback;
+            private readonly RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback;
 
-            public IncomingRequestEntry(RpcDelegate.RequestCallback<TRequestMessage, TService> requestCallback)
+            public IncomingRequestEntry(RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback)
                 : base(typeof(TRequestMessage))
             {
                 this.requestCallback = requestCallback;

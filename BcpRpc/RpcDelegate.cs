@@ -25,8 +25,9 @@ namespace Qifun.BcpRpc
 {
     public sealed class RpcDelegate
     {
-        public delegate IMessage RequestCallback<TRequestMessage, TService>(TRequestMessage message, TService service)
+        public delegate TResponseMessage RequestCallback<TRequestMessage, TResponseMessage, TService>(TRequestMessage message, TService service)
             where TRequestMessage : IMessage
+            where TResponseMessage : IMessage
             where TService : IRpcService;
 
         /// <summary>
