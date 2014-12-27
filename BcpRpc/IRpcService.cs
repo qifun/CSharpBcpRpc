@@ -83,7 +83,7 @@ namespace Qifun.BcpRpc
 
             public override void ExecuteMessage(IMessage message, IRpcService service)
             {
-                messageCallback(message, service);
+                messageCallback((TMessage)message, (TService)service);
             }
 
         }

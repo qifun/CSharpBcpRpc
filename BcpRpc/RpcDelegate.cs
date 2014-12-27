@@ -37,7 +37,7 @@ namespace Qifun.BcpRpc
         /// <typeparam name="TService"></typeparam>
         /// <param name="message"></param>
         /// <param name="service"></param>
-        public delegate void MessageCallback<TMessage, TService>(IMessage message, IRpcService service)
+        public delegate void MessageCallback<TMessage, TService>(TMessage message, TService service)
             where TMessage : IMessage where TService : IRpcService;
 
     }
