@@ -35,55 +35,55 @@ namespace Qifun.BcpRpc
             private readonly Type messageType;
             public Type MessageType { get { return messageType; } }
 
-            public abstract IMessage ExecuteRequest(IMessage message, IRpcService service);
+            public abstract IMessage ExecuteRequest(IMessage message, RpcSession session);
 
-            public abstract void ExecuteMessage(IMessage message, IRpcService service);
+            public abstract void ExecuteMessage(IMessage message, RpcSession session);
 
         }
 
-        public sealed class IncomingRequestEntry<TRequestMessage, TResponseMessage, TService> : IncomingEntry
+        public sealed class IncomingRequestEntry<TRequestMessage, TResponseMessage, TSession> : IncomingEntry
             where TRequestMessage : IMessage
             where TResponseMessage : IMessage
-            where TService : IRpcService
+            where TSession : RpcSession
         {
-            private readonly RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback;
+            private readonly RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TSession> requestCallback;
 
-            public IncomingRequestEntry(RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TService> requestCallback)
+            public IncomingRequestEntry(RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TSession> requestCallback)
                 : base(typeof(TRequestMessage))
             {
                 this.requestCallback = requestCallback;
             }
 
-            public override IMessage ExecuteRequest(IMessage message, IRpcService service)
+            public override IMessage ExecuteRequest(IMessage message, RpcSession session)
             {
-                return requestCallback((TRequestMessage)message, (TService)service);
+                return requestCallback((TRequestMessage)message, (TSession)session);
             }
 
-            public override void ExecuteMessage(IMessage message, IRpcService service)
+            public override void ExecuteMessage(IMessage message, RpcSession session)
             {
                 throw new NotImplementedException();
             }
         }
 
-        public sealed class IncomingMessageEntry<TMessage, TService> : IncomingEntry
-            where TMessage : IMessage where TService : IRpcService
+        public sealed class IncomingMessageEntry<TMessage, TSession> : IncomingEntry
+            where TMessage : IMessage where TSession : RpcSession
         {
-            private readonly RpcDelegate.MessageCallback<TMessage, TService> messageCallback;
+            private readonly RpcDelegate.MessageCallback<TMessage, TSession> messageCallback;
 
-            public IncomingMessageEntry(RpcDelegate.MessageCallback<TMessage, TService> messageCallback)
+            public IncomingMessageEntry(RpcDelegate.MessageCallback<TMessage, TSession> messageCallback)
                 : base(typeof(TMessage))
             {
                 this.messageCallback = messageCallback;
             }
 
-            public override IMessage ExecuteRequest(IMessage message, IRpcService service)
+            public override IMessage ExecuteRequest(IMessage message, RpcSession session)
             {
                 throw new NotImplementedException();
             }
 
-            public override void ExecuteMessage(IMessage message, IRpcService service)
+            public override void ExecuteMessage(IMessage message, RpcSession session)
             {
-                messageCallback((TMessage)message, (TService)service);
+                messageCallback((TMessage)message, (TSession)session);
             }
 
         }

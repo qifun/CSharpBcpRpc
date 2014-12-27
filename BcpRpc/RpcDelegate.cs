@@ -25,10 +25,10 @@ namespace Qifun.BcpRpc
 {
     public sealed class RpcDelegate
     {
-        public delegate TResponseMessage RequestCallback<TRequestMessage, TResponseMessage, TService>(TRequestMessage message, TService service)
+        public delegate TResponseMessage RequestCallback<TRequestMessage, TResponseMessage, TSession>(TRequestMessage message, TSession session)
             where TRequestMessage : IMessage
             where TResponseMessage : IMessage
-            where TService : IRpcService;
+            where TSession : RpcSession;
 
         /// <summary>
         ///  Callback for Event, Info and CastRequest
@@ -37,8 +37,8 @@ namespace Qifun.BcpRpc
         /// <typeparam name="TService"></typeparam>
         /// <param name="message"></param>
         /// <param name="service"></param>
-        public delegate void MessageCallback<TMessage, TService>(TMessage message, TService service)
-            where TMessage : IMessage where TService : IRpcService;
+        public delegate void MessageCallback<TMessage, TSession>(TMessage message, TSession service)
+            where TMessage : IMessage where TSession : RpcSession;
 
     }
 }

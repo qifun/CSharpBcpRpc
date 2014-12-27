@@ -26,7 +26,7 @@ using Google.ProtocolBuffers;
 
 namespace Qifun.BcpRpc
 {
-    public abstract class RpcSession<BcpSession> where BcpSession : Bcp.BcpSession
+    public abstract class RpcSession
     {
 
         public RpcSession(Bcp.BcpSession bcpSession) 
@@ -103,9 +103,9 @@ namespace Qifun.BcpRpc
             private int nextMessageId = -1;
             internal Dictionary<int, IResponseHandler> outgoingRpcResponseHandlers = new Dictionary<int, IResponseHandler>();
             private object outgoingRpcResponseHandlerLock = new Object();
-            private RpcSession<BcpSession> rpcSession;
+            private RpcSession rpcSession;
 
-            public OutgoingProxy(RpcSession<BcpSession> rpcSession)
+            public OutgoingProxy(RpcSession rpcSession)
             {
                 this.rpcSession = rpcSession;
             }
@@ -221,7 +221,7 @@ namespace Qifun.BcpRpc
                                 var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
                                 try
                                 {
-                                    var responseMessage = messageEntry.ExecuteRequest(message, service);
+                                    var responseMessage = messageEntry.ExecuteRequest(message, this);
                                     SendMessage(BcpRpc.SUCCESS, messageId, responseMessage);
                                 }
                                 catch(ErrorCode exception)
@@ -257,7 +257,7 @@ namespace Qifun.BcpRpc
                                 try
                                 {
                                     var message = BytesToMessage(input, messageEntry.MessageType, messageSize);
-                                    messageEntry.ExecuteMessage(message, service);
+                                    messageEntry.ExecuteMessage(message, this);
                                 }
                                 catch (Exception exception)
                                 {
