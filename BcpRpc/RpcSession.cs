@@ -311,7 +311,7 @@ namespace Qifun.BcpRpc
                             {
                                 try
                                 {
-                                    var message = (IMessage)errorType.GetProperty("DefaultInstance").GetValue(null, null);
+                                    var message = BytesToMessage(input, errorType, messageSize);
                                     handler.OnFailure(message);
                                 }
                                 catch (Exception exception)
