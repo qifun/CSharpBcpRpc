@@ -48,7 +48,7 @@
     <Compile Include="BcpRpc.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="IResponseHandler.cs" />
-    <Compile Include="IRpcService.cs" />
+    <Compile Include="RpcService.cs" />
     <Compile Include="RpcDelegate.cs" />
     <Compile Include="RpcException.cs" />
     <Compile Include="RpcSession.cs" />

@@ -23,7 +23,7 @@ using System.Text;
 
 namespace Qifun.BcpRpc
 {
-    public abstract class IRpcService
+    public abstract class RpcService
     {
         public abstract class IncomingEntry
         {

@@ -45,12 +45,12 @@ namespace Qifun.BcpRpc
         public sealed class IncomingProxyEntry
         {
             private string module;
-            private IRpcService incomingService;
+            private RpcService incomingService;
 
             internal string Module { get { return module; } }
-            internal IRpcService IncomingService { get { return incomingService; } }
+            internal RpcService IncomingService { get { return incomingService; } }
 
-            public IncomingProxyEntry(string module, IRpcService incomingService)
+            public IncomingProxyEntry(string module, RpcService incomingService)
             {
                 this.module = module;
                 this.incomingService = incomingService;
@@ -60,9 +60,9 @@ namespace Qifun.BcpRpc
 
         public sealed class IncomingProxyRegistration
         {
-            private readonly Dictionary<string, IRpcService> incomingProxyMap = new Dictionary<string, IRpcService>();
+            private readonly Dictionary<string, RpcService> incomingProxyMap = new Dictionary<string, RpcService>();
 
-            public Dictionary<string, IRpcService> IncomingProxyMap { get { return incomingProxyMap; } }
+            public Dictionary<string, RpcService> IncomingProxyMap { get { return incomingProxyMap; } }
 
             public IncomingProxyRegistration(params IncomingProxyEntry[] incomingEntries)
             {
@@ -208,8 +208,8 @@ namespace Qifun.BcpRpc
             input.ReadBytes(messageNameBytes, 0, messageNameBytes.Length);
             var messageName = Encoding.UTF8.GetString(messageNameBytes);
             var packageName = messageName.Substring(0, messageName.LastIndexOf('.'));
-            IRpcService service;
-            IRpcService.IncomingEntry messageEntry;
+            RpcService service;
+            RpcService.IncomingEntry messageEntry;
             switch(messageType)
             {
                 case BcpRpc.REQUEST:
