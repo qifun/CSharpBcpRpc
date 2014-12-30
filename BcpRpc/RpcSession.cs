@@ -42,7 +42,7 @@ namespace Qifun.BcpRpc
         public Bcp.BcpSession Session { get { return bcpSession; } }
         public OutgoingProxy OutgoingService { get { return outgoingProxy; } }
 
-        public sealed class IncomingProxyEntry
+        protected sealed class IncomingProxyEntry
         {
             private string module;
             private RpcService incomingService;
@@ -58,7 +58,7 @@ namespace Qifun.BcpRpc
 
         }
 
-        public sealed class IncomingProxyRegistration
+        protected sealed class IncomingProxyRegistration
         {
             private readonly Dictionary<string, RpcService> incomingProxyMap = new Dictionary<string, RpcService>();
 
@@ -78,7 +78,7 @@ namespace Qifun.BcpRpc
             get;
         }
 
-        public sealed class ErrorCodeRegistration
+        protected sealed class ErrorCodeRegistration
         {
             private readonly Dictionary<string, Type> errorCodeMap = new Dictionary<string, Type>();
 
