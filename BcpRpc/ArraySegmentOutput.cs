@@ -58,6 +58,7 @@ namespace Qifun.BcpRpc
         public void WriteInt(int i)
         {
             byte[] intBytes = BitConverter.GetBytes(i);
+            Array.Reverse(intBytes, 0, intBytes.Length);
             WriteBytes(intBytes, 0, intBytes.Length);
         }
 
