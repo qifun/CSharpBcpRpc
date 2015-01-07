@@ -102,7 +102,6 @@ namespace Qifun.BcpRpc
         {
             private int nextMessageId = -1;
             internal Dictionary<int, IResponseHandler> outgoingRpcResponseHandlers = new Dictionary<int, IResponseHandler>();
-            private object outgoingRpcResponseHandlerLock = new Object();
             private RpcSession rpcSession;
 
             public OutgoingProxy(RpcSession rpcSession)
@@ -136,12 +135,47 @@ namespace Qifun.BcpRpc
                 }
             }
 
+            internal sealed class UIResponseHandler<TResponseMessage> : IResponseHandler
+            {
+                public UIResponseHandler(
+                    Type responseType, 
+                    Action<TResponseMessage, Action<TResponseMessage>> successCallback,
+                    Action<IMessage, Action<IMessage>> failCallback,
+                    Action<TResponseMessage> uiSuccessCallback,
+                    Action<IMessage> uiFailCallback)
+                {
+                    this.responseType = responseType;
+                    this.successCallback = successCallback;
+                    this.failCallback = failCallback;
+                    this.uiSuccessCallback = uiSuccessCallback;
+                    this.uiFailCallback = uiFailCallback;
+                }
+
+                private readonly Type responseType;
+                private readonly Action<TResponseMessage, Action<TResponseMessage>> successCallback;
+                private readonly Action<IMessage, Action<IMessage>> failCallback;
+                private readonly Action<TResponseMessage> uiSuccessCallback;
+                private readonly Action<IMessage> uiFailCallback;
+
+                public Type ResponseType { get { return responseType; } }
+
+                public void OnSuccess(IMessage message)
+                {
+                    successCallback((TResponseMessage)message, uiSuccessCallback);
+                }
+
+                public void OnFailure(IMessage message)
+                {
+                    failCallback(message, uiFailCallback);
+                }
+            }
+
             public void SendRequest<TResponseMessage>(IMessage message, Action<TResponseMessage> successCallback, Action<IMessage> failCallback) 
                 where TResponseMessage : IMessage
             {
                 Type responseType = typeof(TResponseMessage);
                 int messageId = Interlocked.Increment(ref nextMessageId);
-                lock (outgoingRpcResponseHandlerLock)
+                lock (outgoingRpcResponseHandlers)
                 {
                     if(!outgoingRpcResponseHandlers.ContainsKey(messageId))
                     {
@@ -151,7 +185,32 @@ namespace Qifun.BcpRpc
                     }
                     else
                     {
-                        throw new IllegalRpcData("");
+                        throw new IllegalRpcData("Already contains message id.");
+                    }
+                }
+            }
+
+            public void SendRequest<TResponseMessage>(
+                IMessage message, 
+                Action<TResponseMessage, Action<TResponseMessage>> successCallback,
+                Action<IMessage, Action<IMessage>> failCallback,
+                Action<TResponseMessage> uiSuccessCallback,
+                Action<IMessage> uiFailCallback)
+                where TResponseMessage : IMessage
+            {
+                Type responseType = typeof(TResponseMessage);
+                int messageId = Interlocked.Increment(ref nextMessageId);
+                lock(outgoingRpcResponseHandlers)
+                {
+                    if(!outgoingRpcResponseHandlers.ContainsKey(messageId))
+                    {
+                        var responseHandler = new UIResponseHandler<TResponseMessage>(responseType, successCallback, failCallback, uiSuccessCallback, uiFailCallback);
+                        outgoingRpcResponseHandlers.Add(messageId, responseHandler);
+                        rpcSession.SendMessage(BcpRpc.REQUEST, messageId, message);
+                    }
+                    else
+                    {
+                        throw new IllegalRpcData("Already contains message id.");
                     }
                 }
             }
