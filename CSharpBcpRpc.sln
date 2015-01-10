@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RpcTest", "RpcTest\RpcTest.csproj", "{26FFAC34-960B-4ABE-929B-1554DBEC10D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BcpRpc", "BcpRpc\BcpRpc.csproj", "{23F822E2-727D-4EDB-A2E4-01DB1C1BFBAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcp", "..\CSharpBcp\Bcp\Bcp.csproj", "{FBC8C692-FA6B-46AF-93DE-9CE1BEDBE1DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26FFAC34-960B-4ABE-929B-1554DBEC10D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26FFAC34-960B-4ABE-929B-1554DBEC10D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26FFAC34-960B-4ABE-929B-1554DBEC10D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26FFAC34-960B-4ABE-929B-1554DBEC10D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23F822E2-727D-4EDB-A2E4-01DB1C1BFBAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23F822E2-727D-4EDB-A2E4-01DB1C1BFBAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23F822E2-727D-4EDB-A2E4-01DB1C1BFBAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23F822E2-727D-4EDB-A2E4-01DB1C1BFBAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC8C692-FA6B-46AF-93DE-9CE1BEDBE1DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC8C692-FA6B-46AF-93DE-9CE1BEDBE1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC8C692-FA6B-46AF-93DE-9CE1BEDBE1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC8C692-FA6B-46AF-93DE-9CE1BEDBE1DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
