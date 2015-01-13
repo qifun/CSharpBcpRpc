@@ -6,7 +6,7 @@ using pb = global::Google.ProtocolBuffers;
 using pbc = global::Google.ProtocolBuffers.Collections;
 using pbd = global::Google.ProtocolBuffers.Descriptors;
 using scg = global::System.Collections.Generic;
-namespace com.qifun.common.rpctest {
+namespace Qifun.BcpRpc.Test {
   
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -18,8 +18,8 @@ namespace com.qifun.common.rpctest {
     }
     #endregion
     #region Static variables
-    internal static pbd::MessageDescriptor internal__static_com_qifun_common_rpctest_RpcTestException__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestException, global::com.qifun.common.rpctest.RpcTestException.Builder> internal__static_com_qifun_common_rpctest_RpcTestException__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_Qifun_BcpRpc_Test_RpcTestException__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestException, global::Qifun.BcpRpc.Test.RpcTestException.Builder> internal__static_Qifun_BcpRpc_Test_RpcTestException__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -29,15 +29,15 @@ namespace com.qifun.common.rpctest {
     
     static RpcErrorCode() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "ChJScGNFcnJvckNvZGUucHJvdG8SGGNvbS5xaWZ1bi5jb21tb24ucnBjdGVz" + 
-          "dCJNChBScGNUZXN0RXhjZXB0aW9uEjkKBGNvZGUYASABKA4yKy5jb20ucWlm" + 
-          "dW4uY29tbW9uLnJwY3Rlc3QuUnBjVGVzdEVycm9yQ29kZXMqLwoRUnBjVGVz" + 
-          "dEVycm9yQ29kZXMSDAoIRXJyb3JPbmUQARIMCghFcnJvclR3bxAC");
+          "ChJScGNFcnJvckNvZGUucHJvdG8SEVFpZnVuLkJjcFJwYy5UZXN0IkYKEFJw" + 
+          "Y1Rlc3RFeGNlcHRpb24SMgoEY29kZRgBIAEoDjIkLlFpZnVuLkJjcFJwYy5U" + 
+          "ZXN0LlJwY1Rlc3RFcnJvckNvZGVzKi8KEVJwY1Rlc3RFcnJvckNvZGVzEgwK" + 
+          "CEVycm9yT25lEAESDAoIRXJyb3JUd28QAg==");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
-        internal__static_com_qifun_common_rpctest_RpcTestException__Descriptor = Descriptor.MessageTypes[0];
-        internal__static_com_qifun_common_rpctest_RpcTestException__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestException, global::com.qifun.common.rpctest.RpcTestException.Builder>(internal__static_com_qifun_common_rpctest_RpcTestException__Descriptor,
+        internal__static_Qifun_BcpRpc_Test_RpcTestException__Descriptor = Descriptor.MessageTypes[0];
+        internal__static_Qifun_BcpRpc_Test_RpcTestException__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestException, global::Qifun.BcpRpc.Test.RpcTestException.Builder>(internal__static_Qifun_BcpRpc_Test_RpcTestException__Descriptor,
                 new string[] { "Code", });
         return null;
       };
@@ -80,20 +80,20 @@ namespace com.qifun.common.rpctest {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::com.qifun.common.rpctest.RpcErrorCode.internal__static_com_qifun_common_rpctest_RpcTestException__Descriptor; }
+      get { return global::Qifun.BcpRpc.Test.RpcErrorCode.internal__static_Qifun_BcpRpc_Test_RpcTestException__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<RpcTestException, RpcTestException.Builder> InternalFieldAccessors {
-      get { return global::com.qifun.common.rpctest.RpcErrorCode.internal__static_com_qifun_common_rpctest_RpcTestException__FieldAccessorTable; }
+      get { return global::Qifun.BcpRpc.Test.RpcErrorCode.internal__static_Qifun_BcpRpc_Test_RpcTestException__FieldAccessorTable; }
     }
     
     public const int CodeFieldNumber = 1;
     private bool hasCode;
-    private global::com.qifun.common.rpctest.RpcTestErrorCodes code_ = global::com.qifun.common.rpctest.RpcTestErrorCodes.ErrorOne;
+    private global::Qifun.BcpRpc.Test.RpcTestErrorCodes code_ = global::Qifun.BcpRpc.Test.RpcTestErrorCodes.ErrorOne;
     public bool HasCode {
       get { return hasCode; }
     }
-    public global::com.qifun.common.rpctest.RpcTestErrorCodes Code {
+    public global::Qifun.BcpRpc.Test.RpcTestErrorCodes Code {
       get { return code_; }
     }
     
@@ -221,11 +221,11 @@ namespace com.qifun.common.rpctest {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::com.qifun.common.rpctest.RpcTestException.Descriptor; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestException.Descriptor; }
       }
       
       public override RpcTestException DefaultInstanceForType {
-        get { return global::com.qifun.common.rpctest.RpcTestException.DefaultInstance; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestException.DefaultInstance; }
       }
       
       public override RpcTestException BuildPartial() {
@@ -246,7 +246,7 @@ namespace com.qifun.common.rpctest {
       }
       
       public override Builder MergeFrom(RpcTestException other) {
-        if (other == global::com.qifun.common.rpctest.RpcTestException.DefaultInstance) return this;
+        if (other == global::Qifun.BcpRpc.Test.RpcTestException.DefaultInstance) return this;
         PrepareBuilder();
         if (other.HasCode) {
           Code = other.Code;
@@ -319,11 +319,11 @@ namespace com.qifun.common.rpctest {
       public bool HasCode {
        get { return result.hasCode; }
       }
-      public global::com.qifun.common.rpctest.RpcTestErrorCodes Code {
+      public global::Qifun.BcpRpc.Test.RpcTestErrorCodes Code {
         get { return result.Code; }
         set { SetCode(value); }
       }
-      public Builder SetCode(global::com.qifun.common.rpctest.RpcTestErrorCodes value) {
+      public Builder SetCode(global::Qifun.BcpRpc.Test.RpcTestErrorCodes value) {
         PrepareBuilder();
         result.hasCode = true;
         result.code_ = value;
@@ -332,12 +332,12 @@ namespace com.qifun.common.rpctest {
       public Builder ClearCode() {
         PrepareBuilder();
         result.hasCode = false;
-        result.code_ = global::com.qifun.common.rpctest.RpcTestErrorCodes.ErrorOne;
+        result.code_ = global::Qifun.BcpRpc.Test.RpcTestErrorCodes.ErrorOne;
         return this;
       }
     }
     static RpcTestException() {
-      object.ReferenceEquals(global::com.qifun.common.rpctest.RpcErrorCode.Descriptor, null);
+      object.ReferenceEquals(global::Qifun.BcpRpc.Test.RpcErrorCode.Descriptor, null);
     }
   }
   

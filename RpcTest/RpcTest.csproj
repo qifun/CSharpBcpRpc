@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{26FFAC34-960B-4ABE-929B-1554DBEC10D5}</ProjectGuid>
+    <ProjectGuid>{91418C67-2AE6-4ECB-809A-6873E3EF1E9F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RpcTest</RootNamespace>
@@ -53,8 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Rpc.cs" />
     <Compile Include="RpcErrorCode.cs" />
+    <Compile Include="RpcProtobuf.cs" />
     <Compile Include="RpcTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

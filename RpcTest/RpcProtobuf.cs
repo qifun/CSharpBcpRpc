@@ -6,26 +6,26 @@ using pb = global::Google.ProtocolBuffers;
 using pbc = global::Google.ProtocolBuffers.Collections;
 using pbd = global::Google.ProtocolBuffers.Descriptors;
 using scg = global::System.Collections.Generic;
-namespace com.qifun.common.rpctest {
+namespace Qifun.BcpRpc.Test {
   
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
   [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ProtoGen", "2.4.1.473")]
-  public static partial class Rpc {
+  public static partial class RpcProtobuf {
   
     #region Extension registration
     public static void RegisterAllExtensions(pb::ExtensionRegistry registry) {
     }
     #endregion
     #region Static variables
-    internal static pbd::MessageDescriptor internal__static_com_qifun_common_rpctest_RpcTestRequest__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestRequest, global::com.qifun.common.rpctest.RpcTestRequest.Builder> internal__static_com_qifun_common_rpctest_RpcTestRequest__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_com_qifun_common_rpctest_RpcTestResponse__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestResponse, global::com.qifun.common.rpctest.RpcTestResponse.Builder> internal__static_com_qifun_common_rpctest_RpcTestResponse__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_com_qifun_common_rpctest_RpcTestEvent__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestEvent, global::com.qifun.common.rpctest.RpcTestEvent.Builder> internal__static_com_qifun_common_rpctest_RpcTestEvent__FieldAccessorTable;
-    internal static pbd::MessageDescriptor internal__static_com_qifun_common_rpctest_RpcTestInfo__Descriptor;
-    internal static pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestInfo, global::com.qifun.common.rpctest.RpcTestInfo.Builder> internal__static_com_qifun_common_rpctest_RpcTestInfo__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_Qifun_BcpRpc_Test_RpcTestRequest__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestRequest, global::Qifun.BcpRpc.Test.RpcTestRequest.Builder> internal__static_Qifun_BcpRpc_Test_RpcTestRequest__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_Qifun_BcpRpc_Test_RpcTestResponse__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestResponse, global::Qifun.BcpRpc.Test.RpcTestResponse.Builder> internal__static_Qifun_BcpRpc_Test_RpcTestResponse__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_Qifun_BcpRpc_Test_RpcTestEvent__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestEvent, global::Qifun.BcpRpc.Test.RpcTestEvent.Builder> internal__static_Qifun_BcpRpc_Test_RpcTestEvent__FieldAccessorTable;
+    internal static pbd::MessageDescriptor internal__static_Qifun_BcpRpc_Test_RpcTestInfo__Descriptor;
+    internal static pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestInfo, global::Qifun.BcpRpc.Test.RpcTestInfo.Builder> internal__static_Qifun_BcpRpc_Test_RpcTestInfo__FieldAccessorTable;
     #endregion
     #region Descriptor
     public static pbd::FileDescriptor Descriptor {
@@ -33,29 +33,29 @@ namespace com.qifun.common.rpctest {
     }
     private static pbd::FileDescriptor descriptor;
     
-    static Rpc() {
+    static RpcProtobuf() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
-          "CglScGMucHJvdG8SGGNvbS5xaWZ1bi5jb21tb24ucnBjdGVzdCIcCg5ScGNU" + 
-          "ZXN0UmVxdWVzdBIKCgJpZBgBIAEoBSIdCg9ScGNUZXN0UmVzcG9uc2USCgoC" + 
-          "aWQYASABKAUiGwoMUnBjVGVzdEV2ZW50EgsKAmlkGIAIIAEoBSINCgtScGNU" + 
-          "ZXN0SW5mbw==");
+          "ChFScGNQcm90b2J1Zi5wcm90bxIRUWlmdW4uQmNwUnBjLlRlc3QiHAoOUnBj" + 
+          "VGVzdFJlcXVlc3QSCgoCaWQYASABKAUiHQoPUnBjVGVzdFJlc3BvbnNlEgoK" + 
+          "AmlkGAEgASgFIhsKDFJwY1Rlc3RFdmVudBILCgJpZBiACCABKAUiDQoLUnBj" + 
+          "VGVzdEluZm8=");
       pbd::FileDescriptor.InternalDescriptorAssigner assigner = delegate(pbd::FileDescriptor root) {
         descriptor = root;
-        internal__static_com_qifun_common_rpctest_RpcTestRequest__Descriptor = Descriptor.MessageTypes[0];
-        internal__static_com_qifun_common_rpctest_RpcTestRequest__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestRequest, global::com.qifun.common.rpctest.RpcTestRequest.Builder>(internal__static_com_qifun_common_rpctest_RpcTestRequest__Descriptor,
+        internal__static_Qifun_BcpRpc_Test_RpcTestRequest__Descriptor = Descriptor.MessageTypes[0];
+        internal__static_Qifun_BcpRpc_Test_RpcTestRequest__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestRequest, global::Qifun.BcpRpc.Test.RpcTestRequest.Builder>(internal__static_Qifun_BcpRpc_Test_RpcTestRequest__Descriptor,
                 new string[] { "Id", });
-        internal__static_com_qifun_common_rpctest_RpcTestResponse__Descriptor = Descriptor.MessageTypes[1];
-        internal__static_com_qifun_common_rpctest_RpcTestResponse__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestResponse, global::com.qifun.common.rpctest.RpcTestResponse.Builder>(internal__static_com_qifun_common_rpctest_RpcTestResponse__Descriptor,
+        internal__static_Qifun_BcpRpc_Test_RpcTestResponse__Descriptor = Descriptor.MessageTypes[1];
+        internal__static_Qifun_BcpRpc_Test_RpcTestResponse__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestResponse, global::Qifun.BcpRpc.Test.RpcTestResponse.Builder>(internal__static_Qifun_BcpRpc_Test_RpcTestResponse__Descriptor,
                 new string[] { "Id", });
-        internal__static_com_qifun_common_rpctest_RpcTestEvent__Descriptor = Descriptor.MessageTypes[2];
-        internal__static_com_qifun_common_rpctest_RpcTestEvent__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestEvent, global::com.qifun.common.rpctest.RpcTestEvent.Builder>(internal__static_com_qifun_common_rpctest_RpcTestEvent__Descriptor,
+        internal__static_Qifun_BcpRpc_Test_RpcTestEvent__Descriptor = Descriptor.MessageTypes[2];
+        internal__static_Qifun_BcpRpc_Test_RpcTestEvent__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestEvent, global::Qifun.BcpRpc.Test.RpcTestEvent.Builder>(internal__static_Qifun_BcpRpc_Test_RpcTestEvent__Descriptor,
                 new string[] { "Id", });
-        internal__static_com_qifun_common_rpctest_RpcTestInfo__Descriptor = Descriptor.MessageTypes[3];
-        internal__static_com_qifun_common_rpctest_RpcTestInfo__FieldAccessorTable = 
-            new pb::FieldAccess.FieldAccessorTable<global::com.qifun.common.rpctest.RpcTestInfo, global::com.qifun.common.rpctest.RpcTestInfo.Builder>(internal__static_com_qifun_common_rpctest_RpcTestInfo__Descriptor,
+        internal__static_Qifun_BcpRpc_Test_RpcTestInfo__Descriptor = Descriptor.MessageTypes[3];
+        internal__static_Qifun_BcpRpc_Test_RpcTestInfo__FieldAccessorTable = 
+            new pb::FieldAccess.FieldAccessorTable<global::Qifun.BcpRpc.Test.RpcTestInfo, global::Qifun.BcpRpc.Test.RpcTestInfo.Builder>(internal__static_Qifun_BcpRpc_Test_RpcTestInfo__Descriptor,
                 new string[] { });
         return null;
       };
@@ -88,11 +88,11 @@ namespace com.qifun.common.rpctest {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestRequest__Descriptor; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestRequest__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<RpcTestRequest, RpcTestRequest.Builder> InternalFieldAccessors {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestRequest__FieldAccessorTable; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestRequest__FieldAccessorTable; }
     }
     
     public const int IdFieldNumber = 1;
@@ -229,11 +229,11 @@ namespace com.qifun.common.rpctest {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::com.qifun.common.rpctest.RpcTestRequest.Descriptor; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestRequest.Descriptor; }
       }
       
       public override RpcTestRequest DefaultInstanceForType {
-        get { return global::com.qifun.common.rpctest.RpcTestRequest.DefaultInstance; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestRequest.DefaultInstance; }
       }
       
       public override RpcTestRequest BuildPartial() {
@@ -254,7 +254,7 @@ namespace com.qifun.common.rpctest {
       }
       
       public override Builder MergeFrom(RpcTestRequest other) {
-        if (other == global::com.qifun.common.rpctest.RpcTestRequest.DefaultInstance) return this;
+        if (other == global::Qifun.BcpRpc.Test.RpcTestRequest.DefaultInstance) return this;
         PrepareBuilder();
         if (other.HasId) {
           Id = other.Id;
@@ -337,7 +337,7 @@ namespace com.qifun.common.rpctest {
       }
     }
     static RpcTestRequest() {
-      object.ReferenceEquals(global::com.qifun.common.rpctest.Rpc.Descriptor, null);
+      object.ReferenceEquals(global::Qifun.BcpRpc.Test.RpcProtobuf.Descriptor, null);
     }
   }
   
@@ -362,11 +362,11 @@ namespace com.qifun.common.rpctest {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestResponse__Descriptor; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestResponse__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<RpcTestResponse, RpcTestResponse.Builder> InternalFieldAccessors {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestResponse__FieldAccessorTable; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestResponse__FieldAccessorTable; }
     }
     
     public const int IdFieldNumber = 1;
@@ -503,11 +503,11 @@ namespace com.qifun.common.rpctest {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::com.qifun.common.rpctest.RpcTestResponse.Descriptor; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestResponse.Descriptor; }
       }
       
       public override RpcTestResponse DefaultInstanceForType {
-        get { return global::com.qifun.common.rpctest.RpcTestResponse.DefaultInstance; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestResponse.DefaultInstance; }
       }
       
       public override RpcTestResponse BuildPartial() {
@@ -528,7 +528,7 @@ namespace com.qifun.common.rpctest {
       }
       
       public override Builder MergeFrom(RpcTestResponse other) {
-        if (other == global::com.qifun.common.rpctest.RpcTestResponse.DefaultInstance) return this;
+        if (other == global::Qifun.BcpRpc.Test.RpcTestResponse.DefaultInstance) return this;
         PrepareBuilder();
         if (other.HasId) {
           Id = other.Id;
@@ -611,7 +611,7 @@ namespace com.qifun.common.rpctest {
       }
     }
     static RpcTestResponse() {
-      object.ReferenceEquals(global::com.qifun.common.rpctest.Rpc.Descriptor, null);
+      object.ReferenceEquals(global::Qifun.BcpRpc.Test.RpcProtobuf.Descriptor, null);
     }
   }
   
@@ -636,11 +636,11 @@ namespace com.qifun.common.rpctest {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestEvent__Descriptor; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestEvent__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<RpcTestEvent, RpcTestEvent.Builder> InternalFieldAccessors {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestEvent__FieldAccessorTable; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestEvent__FieldAccessorTable; }
     }
     
     public const int IdFieldNumber = 1024;
@@ -777,11 +777,11 @@ namespace com.qifun.common.rpctest {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::com.qifun.common.rpctest.RpcTestEvent.Descriptor; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestEvent.Descriptor; }
       }
       
       public override RpcTestEvent DefaultInstanceForType {
-        get { return global::com.qifun.common.rpctest.RpcTestEvent.DefaultInstance; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestEvent.DefaultInstance; }
       }
       
       public override RpcTestEvent BuildPartial() {
@@ -802,7 +802,7 @@ namespace com.qifun.common.rpctest {
       }
       
       public override Builder MergeFrom(RpcTestEvent other) {
-        if (other == global::com.qifun.common.rpctest.RpcTestEvent.DefaultInstance) return this;
+        if (other == global::Qifun.BcpRpc.Test.RpcTestEvent.DefaultInstance) return this;
         PrepareBuilder();
         if (other.HasId) {
           Id = other.Id;
@@ -885,7 +885,7 @@ namespace com.qifun.common.rpctest {
       }
     }
     static RpcTestEvent() {
-      object.ReferenceEquals(global::com.qifun.common.rpctest.Rpc.Descriptor, null);
+      object.ReferenceEquals(global::Qifun.BcpRpc.Test.RpcProtobuf.Descriptor, null);
     }
   }
   
@@ -910,11 +910,11 @@ namespace com.qifun.common.rpctest {
     }
     
     public static pbd::MessageDescriptor Descriptor {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestInfo__Descriptor; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestInfo__Descriptor; }
     }
     
     protected override pb::FieldAccess.FieldAccessorTable<RpcTestInfo, RpcTestInfo.Builder> InternalFieldAccessors {
-      get { return global::com.qifun.common.rpctest.Rpc.internal__static_com_qifun_common_rpctest_RpcTestInfo__FieldAccessorTable; }
+      get { return global::Qifun.BcpRpc.Test.RpcProtobuf.internal__static_Qifun_BcpRpc_Test_RpcTestInfo__FieldAccessorTable; }
     }
     
     public override bool IsInitialized {
@@ -1035,11 +1035,11 @@ namespace com.qifun.common.rpctest {
       }
       
       public override pbd::MessageDescriptor DescriptorForType {
-        get { return global::com.qifun.common.rpctest.RpcTestInfo.Descriptor; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestInfo.Descriptor; }
       }
       
       public override RpcTestInfo DefaultInstanceForType {
-        get { return global::com.qifun.common.rpctest.RpcTestInfo.DefaultInstance; }
+        get { return global::Qifun.BcpRpc.Test.RpcTestInfo.DefaultInstance; }
       }
       
       public override RpcTestInfo BuildPartial() {
@@ -1060,7 +1060,7 @@ namespace com.qifun.common.rpctest {
       }
       
       public override Builder MergeFrom(RpcTestInfo other) {
-        if (other == global::com.qifun.common.rpctest.RpcTestInfo.DefaultInstance) return this;
+        if (other == global::Qifun.BcpRpc.Test.RpcTestInfo.DefaultInstance) return this;
         PrepareBuilder();
         this.MergeUnknownFields(other.UnknownFields);
         return this;
@@ -1116,7 +1116,7 @@ namespace com.qifun.common.rpctest {
       
     }
     static RpcTestInfo() {
-      object.ReferenceEquals(global::com.qifun.common.rpctest.Rpc.Descriptor, null);
+      object.ReferenceEquals(global::Qifun.BcpRpc.Test.RpcProtobuf.Descriptor, null);
     }
   }
   

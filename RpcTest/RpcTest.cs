@@ -4,15 +4,15 @@ using Qifun.Bcp;
 using Qifun.BcpRpc;
 using System.Net;
 using System.Net.Sockets;
-using com.qifun.common.rpctest;
 using Google.ProtocolBuffers;
 using System.Threading;
+using Qifun.BcpRpc.Test;
 
 namespace RpcTest
 {
     abstract class TestServer : BcpServer
     {
-        public static IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Loopback, 3333);
+        public static IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Loopback, 0);
 
         Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -53,9 +53,10 @@ namespace RpcTest
     class Client : BcpClient
     {
         private EndPoint localEndPoint;
-        public Client()
+
+        public Client(EndPoint localEndPoint)
         {
-            this.localEndPoint = new IPEndPoint(IPAddress.Loopback, 3333);
+            this.localEndPoint = localEndPoint;
         }
 
         protected override Socket Connect()
@@ -100,7 +101,7 @@ namespace RpcTest
                 }
 
                 private RpcSession.IncomingProxyRegistration incomingServices = new IncomingProxyRegistration(
-                   new IncomingProxyEntry("com.qifun.common.rpctest", new Service())
+                   new IncomingProxyEntry("Qifun.BcpRpc.Test", new Service())
                 );
 
                 protected override RpcSession.IncomingProxyRegistration IncomingServices
@@ -143,7 +144,7 @@ namespace RpcTest
             }
 
             private static RpcSession.IncomingProxyRegistration incomingServices = new IncomingProxyRegistration(
-                new IncomingProxyEntry("com.qifun.common.rpctest", new Service())
+                new IncomingProxyEntry("Qifun.BcpRpc.Test", new Service())
                 );
 
             protected override RpcSession.IncomingProxyRegistration IncomingServices
@@ -185,7 +186,7 @@ namespace RpcTest
         public void PingPong()
         {
             var server = new PingPongServer();
-            var client = new PingPongClient(new Client());
+            var client = new PingPongClient(new Client(server.LocalEndPoint));
             var aEvent = new RpcTestEvent.Builder();
             aEvent.SetId(922);
             var message = new RpcTestRequest.Builder();
