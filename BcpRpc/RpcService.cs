@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-using Google.ProtocolBuffers;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Qifun.BcpRpc
@@ -35,15 +34,15 @@ namespace Qifun.BcpRpc
             private readonly Type messageType;
             public Type MessageType { get { return messageType; } }
 
-            public abstract IMessage ExecuteRequest(IMessage message, RpcSession session);
+            public abstract IExtensible ExecuteRequest(IExtensible message, RpcSession session);
 
-            public abstract void ExecuteMessage(IMessage message, RpcSession session);
+            public abstract void ExecuteMessage(ProtoBuf.IExtensible message, RpcSession session);
 
         }
 
         public sealed class IncomingRequestEntry<TRequestMessage, TResponseMessage, TSession> : IncomingEntry
-            where TRequestMessage : IMessage
-            where TResponseMessage : IMessage
+            where TRequestMessage : IExtensible 
+            where TResponseMessage : IExtensible
             where TSession : RpcSession
         {
             private readonly RpcDelegate.RequestCallback<TRequestMessage, TResponseMessage, TSession> requestCallback;
@@ -54,19 +53,19 @@ namespace Qifun.BcpRpc
                 this.requestCallback = requestCallback;
             }
 
-            public override IMessage ExecuteRequest(IMessage message, RpcSession session)
+            public override IExtensible ExecuteRequest(IExtensible message, RpcSession session)
             {
                 return requestCallback((TRequestMessage)message, (TSession)session);
             }
 
-            public override void ExecuteMessage(IMessage message, RpcSession session)
+            public override void ExecuteMessage(IExtensible message, RpcSession session)
             {
                 throw new NotImplementedException();
             }
         }
 
         public sealed class IncomingMessageEntry<TMessage, TSession> : IncomingEntry
-            where TMessage : IMessage where TSession : RpcSession
+            where TMessage : IExtensible where TSession : RpcSession
         {
             private readonly RpcDelegate.MessageCallback<TMessage, TSession> messageCallback;
 
@@ -76,12 +75,12 @@ namespace Qifun.BcpRpc
                 this.messageCallback = messageCallback;
             }
 
-            public override IMessage ExecuteRequest(IMessage message, RpcSession session)
+            public override IExtensible ExecuteRequest(IExtensible message, RpcSession session)
             {
                 throw new NotImplementedException();
             }
 
-            public override void ExecuteMessage(IMessage message, RpcSession session)
+            public override void ExecuteMessage(IExtensible message, RpcSession session)
             {
                 messageCallback((TMessage)message, (TSession)session);
             }

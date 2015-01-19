@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Google.ProtocolBuffers;
 
 namespace Qifun.BcpRpc
 {
@@ -27,9 +26,9 @@ namespace Qifun.BcpRpc
     {
         Type ResponseType { get; }
 
-        void OnSuccess(IMessage message);
+        void OnSuccess(IExtensible message);
 
-        void OnFailure(IMessage message);
+        void OnFailure(IExtensible message);
 
     }
 }

@@ -15,19 +15,18 @@
  * limitations under the License.
  */
 
-using Google.ProtocolBuffers;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Qifun.BcpRpc
 {
     public sealed class ErrorCode: Exception
     {
-        private IMessage message;
-        public IMessage ProtobufMessage { get { return message; } }
-        public ErrorCode(IMessage message)
+        private IExtensible message;
+        public IExtensible ProtobufMessage { get { return message; } }
+        public ErrorCode(IExtensible message)
         {
             this.message = message;
         }

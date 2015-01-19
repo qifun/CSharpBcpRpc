@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Qifun.BcpRpc
@@ -26,7 +25,7 @@ namespace Qifun.BcpRpc
     {
         private static int PageSize = 128;
 
-        public IList<ArraySegment<byte>> Buffers = new System.Collections.Generic.List<ArraySegment<byte>>();
+        public List<ArraySegment<byte>> Buffers = new List<ArraySegment<byte>>();
 
         public void WriteByte(int c)
         {
@@ -38,7 +37,7 @@ namespace Qifun.BcpRpc
             }
             else
             {
-                var last = Buffers.Last();
+                var last = Buffers[Buffers.Count - 1];
                 if(last.Count < PageSize)
                 {
                     current = last;
@@ -72,7 +71,7 @@ namespace Qifun.BcpRpc
             }
             else
             {
-                var last = Buffers.Last();
+                var last = Buffers[Buffers.Count - 1];
                 if (last.Count < PageSize)
                 {
                     current = last;

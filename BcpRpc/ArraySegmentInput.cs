@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Qifun.BcpRpc
@@ -34,7 +33,7 @@ namespace Qifun.BcpRpc
             this.buffers = buffers.GetEnumerator();
             if (buffers.Count != 0)
             {
-                current = buffers.First();
+                current = buffers[0];
             }
         }
 

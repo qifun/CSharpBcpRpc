@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-using Google.ProtocolBuffers;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Qifun.BcpRpc
@@ -26,8 +25,8 @@ namespace Qifun.BcpRpc
     public sealed class RpcDelegate
     {
         public delegate TResponseMessage RequestCallback<TRequestMessage, TResponseMessage, TSession>(TRequestMessage message, TSession session)
-            where TRequestMessage : IMessage
-            where TResponseMessage : IMessage
+            where TRequestMessage : IExtensible
+            where TResponseMessage : IExtensible 
             where TSession : RpcSession;
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace Qifun.BcpRpc
         /// <param name="message"></param>
         /// <param name="service"></param>
         public delegate void MessageCallback<TMessage, TSession>(TMessage message, TSession service)
-            where TMessage : IMessage where TSession : RpcSession;
+            where TMessage : IExtensible where TSession : RpcSession;
 
     }
 }

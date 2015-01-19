@@ -17,12 +17,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using Qifun.Bcp;
 using System.Threading;
-using Google.ProtocolBuffers;
+using ProtoBuf;
+using System.IO;
 
 namespace Qifun.BcpRpc
 {
@@ -111,7 +111,7 @@ namespace Qifun.BcpRpc
 
             internal sealed class ResponseHandler<TResponseMessage> : IResponseHandler
             {
-                public ResponseHandler(Type responseType, Action<TResponseMessage> successCallback, Action<IMessage> failCallback)
+                public ResponseHandler(Type responseType, Action<TResponseMessage> successCallback, Action<IExtensible> failCallback)
                 {
                     this.responseType = responseType;
                     this.successCallback = successCallback;
@@ -119,17 +119,17 @@ namespace Qifun.BcpRpc
                 }
 
                 private readonly Action<TResponseMessage> successCallback;
-                private readonly Action<IMessage> failCallback;
+                private readonly Action<IExtensible> failCallback;
                 private readonly Type responseType;
 
                 public Type ResponseType { get { return responseType; } }
 
-                public void OnSuccess(IMessage message)
+                public void OnSuccess(IExtensible message)
                 {
                     successCallback((TResponseMessage)message);
                 }
 
-                public void OnFailure(IMessage message)
+                public void OnFailure(IExtensible message)
                 {
                     failCallback(message);
                 }
@@ -140,9 +140,9 @@ namespace Qifun.BcpRpc
                 public UIResponseHandler(
                     Type responseType, 
                     Action<TResponseMessage, Action<TResponseMessage>> successCallback,
-                    Action<IMessage, Action<IMessage>> failCallback,
+                    Action<IExtensible, Action<IExtensible>> failCallback,
                     Action<TResponseMessage> uiSuccessCallback,
-                    Action<IMessage> uiFailCallback)
+                    Action<IExtensible> uiFailCallback)
                 {
                     this.responseType = responseType;
                     this.successCallback = successCallback;
@@ -153,25 +153,25 @@ namespace Qifun.BcpRpc
 
                 private readonly Type responseType;
                 private readonly Action<TResponseMessage, Action<TResponseMessage>> successCallback;
-                private readonly Action<IMessage, Action<IMessage>> failCallback;
+                private readonly Action<IExtensible, Action<IExtensible>> failCallback;
                 private readonly Action<TResponseMessage> uiSuccessCallback;
-                private readonly Action<IMessage> uiFailCallback;
+                private readonly Action<IExtensible> uiFailCallback;
 
                 public Type ResponseType { get { return responseType; } }
 
-                public void OnSuccess(IMessage message)
+                public void OnSuccess(IExtensible message)
                 {
                     successCallback((TResponseMessage)message, uiSuccessCallback);
                 }
 
-                public void OnFailure(IMessage message)
+                public void OnFailure(IExtensible message)
                 {
                     failCallback(message, uiFailCallback);
                 }
             }
 
-            public void SendRequest<TResponseMessage>(IMessage message, Action<TResponseMessage> successCallback, Action<IMessage> failCallback) 
-                where TResponseMessage : IMessage
+            public void SendRequest<TResponseMessage>(IExtensible message, Action<TResponseMessage> successCallback, Action<IExtensible> failCallback) 
+                where TResponseMessage : IExtensible 
             {
                 Type responseType = typeof(TResponseMessage);
                 int messageId = Interlocked.Increment(ref nextMessageId);
@@ -190,23 +190,24 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            public void SendRequest<TResponseMessage>(
-                IMessage message, 
-                Action<TResponseMessage, Action<TResponseMessage>> successCallback,
-                Action<IMessage, Action<IMessage>> failCallback,
-                Action<TResponseMessage> uiSuccessCallback,
-                Action<IMessage> uiFailCallback)
-                where TResponseMessage : IMessage
+            public void SendRequest<TReqeust, TResponse>(
+                TReqeust message, 
+                Action<TResponse, Action<TResponse>> successCallback,
+                Action<IExtensible, Action<IExtensible>> failCallback,
+                Action<TResponse> uiSuccessCallback,
+                Action<IExtensible> uiFailCallback)
+                where TReqeust : IExtensible
+                where TResponse : IExtensible
             {
-                Type responseType = typeof(TResponseMessage);
+                Type responseType = typeof(TResponse);
                 int messageId = Interlocked.Increment(ref nextMessageId);
                 lock(outgoingRpcResponseHandlers)
                 {
                     if(!outgoingRpcResponseHandlers.ContainsKey(messageId))
                     {
-                        var responseHandler = new UIResponseHandler<TResponseMessage>(responseType, successCallback, failCallback, uiSuccessCallback, uiFailCallback);
+                        var responseHandler = new UIResponseHandler<TResponse>(responseType, successCallback, failCallback, uiSuccessCallback, uiFailCallback);
                         outgoingRpcResponseHandlers.Add(messageId, responseHandler);
-                        rpcSession.SendMessage(BcpRpc.REQUEST, messageId, message);
+                        rpcSession.SendMessage<TReqeust>(BcpRpc.REQUEST, messageId, message);
                     }
                     else
                     {
@@ -215,19 +216,26 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            public void PushMessage(IMessage eventMessage)
+            public void PushMessage<TPush>(TPush eventMessage)
+                where TPush : IExtensible
             {
                 int messageId = Interlocked.Increment(ref nextMessageId);
-                rpcSession.SendMessage(BcpRpc.PUSHMESSAGE, messageId, eventMessage);
+                rpcSession.SendMessage<TPush>(BcpRpc.PUSHMESSAGE, messageId, eventMessage);
             }
 
         }
 
-        private void SendMessage(int messageType, int messageId, IMessage message)
+        private void SendMessage<TMessage>(int messageType, int messageId, TMessage message)
+            where TMessage : IExtensible
         {
             var messageName = message.GetType().FullName;
             var nameSize = messageName.Length;
-            var messageByteArray = message.ToByteArray();
+            byte[] messageByteArray;
+            using(var stream = new MemoryStream())
+            {
+                Serializer.Serialize<TMessage>(stream, message);
+                messageByteArray = stream.ToArray();
+            }
             var messageSize = messageByteArray.Length;
             var output = new ArraySegmentOutput();
             var messageNameBytes = Encoding.UTF8.GetBytes(messageName);
@@ -240,19 +248,27 @@ namespace Qifun.BcpRpc
             bcpSession.Send(output.Buffers);
         }
 
-        private IMessage BytesToMessage(ArraySegmentInput input, Type messageType, int messageSize)
+        private IExtensible BytesToMessage(ArraySegmentInput input, Type messageType, int messageSize)
         {
             if(messageSize > 0)
             {
                 var messageBytes = new byte[messageSize];
                 input.ReadBytes(messageBytes, 0, messageBytes.Length);
-                var messageObject = messageType.GetProperty("DefaultInstance").GetValue(null, null);
-                var parseFrom = messageType.GetMethod("ParseFrom", new Type[] { typeof(byte[]) });
-                return (IMessage)parseFrom.Invoke(messageObject, new object[] { messageBytes });
+                object messageObject;
+                using(var stream = new MemoryStream(messageBytes))
+                {
+                    messageObject = Serializer.NonGeneric.Deserialize(messageType, stream);
+                }
+                return (IExtensible)messageObject;
             }
             else
             {
-                return (IMessage)messageType.GetProperty("DefaultInstance").GetValue(null, null);
+                object messageObject;
+                using(var stream = new MemoryStream())
+                {
+                    messageObject = Serializer.NonGeneric.Deserialize(messageType, stream);
+                }
+                return (IExtensible)messageObject;
             }
         }
 
