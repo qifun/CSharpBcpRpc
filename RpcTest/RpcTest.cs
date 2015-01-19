@@ -83,14 +83,18 @@ namespace RpcTest
         volatile static String eventResult = null;
         class PingPongServer : TestServer
         {
+            public PingPongSession serverSession;
+
             protected override BcpServer.Session NewSession(byte[] sessionId)
             {
                 var session = new BcpServer.Session(this, sessionId);
-                serverSession = new PingPongSession(session);
+                lock (pingPongLock)
+                {
+                    serverSession = new PingPongSession(session);
+                    Monitor.Pulse(pingPongLock);
+                }
                 return session;
             }
-
-            public PingPongSession serverSession;
 
             public class PingPongSession : RpcSession
             {
@@ -127,10 +131,10 @@ namespace RpcTest
 
                 private static RpcTestResponse HandleRpcRequest(RpcTestRequest message, PingPongServer.PingPongSession session)
                 {
-                    serverResult = message.Id + "";
-                    var builder = new RpcTestResponse.Builder();
-                    builder.SetId(710);
-                    return builder.Build();
+                    serverResult = message.id + "";
+                    var response = new RpcTestResponse();
+                    response.id = 710;
+                    return response;
                 }
             }
         }
@@ -175,7 +179,7 @@ namespace RpcTest
                 {
                     lock (pingPongLock)
                     {
-                        eventResult = message.Id + "";
+                        eventResult = message.id + "";
                         Monitor.Pulse(pingPongLock);
                     }
 
@@ -187,20 +191,20 @@ namespace RpcTest
         {
             var server = new PingPongServer();
             var client = new PingPongClient(new Client(server.LocalEndPoint));
-            var aEvent = new RpcTestEvent.Builder();
-            aEvent.SetId(922);
-            var message = new RpcTestRequest.Builder();
-            message.SetId(316);
-            client.OutgoingService.SendRequest<RpcTestResponse>(message.Build(),
+            var aEvent = new RpcTestEvent();
+            aEvent.id = 922;
+            var message = new RpcTestRequest();
+            message.id = 316;
+            client.OutgoingService.SendRequest<RpcTestResponse>(message,
                 delegate(RpcTestResponse response)
                 {
                     lock (pingPongLock)
                     {
-                        clientResult = response.Id + "";
+                        clientResult = response.id + "";
                         Monitor.Pulse(pingPongLock);
                     }
                 },
-                delegate(IMessage fail)
+                delegate(ProtoBuf.IExtensible fail)
                 {
                     lock (pingPongLock)
                     {
@@ -209,7 +213,14 @@ namespace RpcTest
                         Monitor.Pulse(pingPongLock);
                     }
                 });
-            server.serverSession.OutgoingService.PushMessage(aEvent.Build());
+            lock (pingPongLock)
+            {
+                while(server.serverSession == null)
+                {
+                    Monitor.Wait(pingPongLock);
+                }
+            }
+            server.serverSession.OutgoingService.PushMessage(aEvent);
             lock (pingPongLock)
             {
                 while (serverResult == null || clientResult == null || eventResult == null)

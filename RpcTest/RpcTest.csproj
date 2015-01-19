@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{91418C67-2AE6-4ECB-809A-6873E3EF1E9F}</ProjectGuid>
+    <ProjectGuid>{26FFAC34-960B-4ABE-929B-1554DBEC10D5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RpcTest</RootNamespace>
@@ -35,8 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.ProtocolBuffers">
-      <HintPath>..\..\Common\tools\Google.ProtocolBuffers.dll</HintPath>
+    <Reference Include="Google.ProtocolBuffers, Version=2.4.1.473, Culture=neutral, PublicKeyToken=17b3b1f090c3ea48, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>protobuf\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>protobuf\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

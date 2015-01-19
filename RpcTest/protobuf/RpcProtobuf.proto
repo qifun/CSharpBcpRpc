@@ -1,0 +1,20 @@
+package Qifun.BcpRpc.Test;
+
+// 一个Request对应一个Response
+message RpcTestRequest {
+		optional int32 id = 1;
+}
+
+// 一个Request对应一个Response
+message RpcTestResponse {
+		optional int32 id = 1;
+}
+
+// 事件
+message RpcTestEvent {
+		optional int32 id = 1024;
+}
+
+// 数据
+message RpcTestInfo {
+}

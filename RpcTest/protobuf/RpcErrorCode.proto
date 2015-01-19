@@ -1,0 +1,10 @@
+package Qifun.BcpRpc.Test;
+
+enum RpcTestErrorCodes {
+	ErrorOne = 1;
+	ErrorTwo = 2;
+}
+
+message RpcTestException {
+	optional RpcTestErrorCodes code = 1;
+}
