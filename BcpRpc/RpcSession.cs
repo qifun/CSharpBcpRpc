@@ -102,6 +102,7 @@ namespace Qifun.BcpRpc
         {
             private int nextMessageId = -1;
             internal Dictionary<int, IResponseHandler> outgoingRpcResponseHandlers = new Dictionary<int, IResponseHandler>();
+            private object outgoingRpcResponseHandlerLock = new Object();
             private RpcSession rpcSession;
 
             public OutgoingProxy(RpcSession rpcSession)
@@ -175,7 +176,7 @@ namespace Qifun.BcpRpc
             {
                 Type responseType = typeof(TResponseMessage);
                 int messageId = Interlocked.Increment(ref nextMessageId);
-                lock (outgoingRpcResponseHandlers)
+                lock (outgoingRpcResponseHandlerLock)
                 {
                     if(!outgoingRpcResponseHandlers.ContainsKey(messageId))
                     {
@@ -185,7 +186,7 @@ namespace Qifun.BcpRpc
                     }
                     else
                     {
-                        throw new IllegalRpcData("Already contains message id.");
+                        throw new IllegalRpcData("");
                     }
                 }
             }

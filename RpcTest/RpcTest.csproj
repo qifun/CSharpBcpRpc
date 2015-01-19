@@ -53,8 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Rpc.cs" />
     <Compile Include="RpcErrorCode.cs" />
+    <Compile Include="RpcProtobuf.cs" />
     <Compile Include="RpcTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
