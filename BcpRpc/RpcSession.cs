@@ -273,6 +273,36 @@ namespace Qifun.BcpRpc
             }
         }
 
+        private void LogCantHandleMessage(string messageName)
+        {
+#if UNITY_EDITOR
+            UnityEngin.Debug.LogWarning
+#else
+            Debug.WriteLine
+#endif
+            ("Illegal RPC data, can't handle such message: " + messageName);
+        }
+
+        private void LogNotService(string packageName)
+        {
+#if UNITY_EDITOR
+            UnityEngin.Debug.LogWarning
+#else
+            Debug.WriteLine
+#endif
+            ("Illegal RPC data, not such service: " + packageName);
+        }
+
+        private void LogExecuteFail(Exception exception)
+        {
+#if UNITY_EDITOR
+            UnityEngin.Debug.LogWarning
+#else
+            Debug.WriteLine
+#endif
+            ("Handle message fail: " + exception.StackTrace);
+        }
+
         private void OnReceived(object sender, Bcp.BcpSession.ReceivedEventArgs e)
         {
             var input = new ArraySegmentInput(e.Buffers);
@@ -307,20 +337,17 @@ namespace Qifun.BcpRpc
                                 }
                                 catch(Exception exception)
                                 {
-                                    this.bcpSession.Interrupt();
-                                    Debug.WriteLine("Handle request fail: " + exception.StackTrace);
+                                    LogExecuteFail(exception);
                                 }
                             }
                             else
                             {
-                                this.bcpSession.Interrupt();
-                                Debug.WriteLine("Illegal RPC data!");
+                                LogCantHandleMessage(messageName);
                             }
                         }
                         else
                         {
-                            this.bcpSession.Interrupt();
-                            Debug.WriteLine("Illegal RPC data!");
+                            LogNotService(packageName);
                         }
                         break;
                     }
@@ -337,19 +364,17 @@ namespace Qifun.BcpRpc
                                 }
                                 catch (Exception exception)
                                 {
-                                    Debug.WriteLine("Handle Message Failed: " + exception.StackTrace);
+                                    LogExecuteFail(exception);
                                 }
                             }
                             else
                             {
-                                this.bcpSession.Interrupt();
-                                Debug.WriteLine("Illegal RPC data!");
+                                LogCantHandleMessage(messageName);
                             }
                         }
                         else
                         {
-                            this.bcpSession.Interrupt();
-                            Debug.WriteLine("Illegal RPC data!");
+                            LogNotService(packageName);
                         }
                         break;
                     }
@@ -366,13 +391,12 @@ namespace Qifun.BcpRpc
                             }
                             catch (Exception exception)
                             {
-                                Debug.WriteLine("Handle request fail: " + exception.StackTrace);
+                                LogExecuteFail(exception);
                             }
                         }
                         else
                         {
-                            this.bcpSession.Interrupt();
-                            Debug.WriteLine("Illegal RPC data!");
+                            LogCantHandleMessage(messageName);
                         }
                         break;
                     }
@@ -392,26 +416,23 @@ namespace Qifun.BcpRpc
                                 }
                                 catch (Exception exception)
                                 {
-                                    Debug.WriteLine("Handle request fail: " + exception.StackTrace);
+                                    LogExecuteFail(exception);
                                 }
                             }
                             else
                             {
-                                this.bcpSession.Interrupt();
-                                Debug.WriteLine("Illegal RPC error code!");
+                                LogCantHandleMessage(messageName);
                             }
                         }
                         else
                         {
-                            this.bcpSession.Interrupt();
-                            Debug.WriteLine("Illegal RPC data!");
+                            LogCantHandleMessage(messageName);
                         }
                         break;
                     }
                 default:
                     {
-                        this.bcpSession.Interrupt();
-						Debug.WriteLine("Illegal RPC data!");
+                        LogCantHandleMessage(messageName);
                         break;
                     }
             }
