@@ -276,7 +276,7 @@ namespace Qifun.BcpRpc
         private void LogCantHandleMessage(string messageName)
         {
 #if UNITY_EDITOR
-            UnityEngin.Debug.LogWarning
+            UnityEngine.Debug.LogWarning
 #else
             Debug.WriteLine
 #endif
@@ -286,7 +286,7 @@ namespace Qifun.BcpRpc
         private void LogNotService(string packageName)
         {
 #if UNITY_EDITOR
-            UnityEngin.Debug.LogWarning
+            UnityEngine.Debug.LogWarning
 #else
             Debug.WriteLine
 #endif
@@ -296,7 +296,7 @@ namespace Qifun.BcpRpc
         private void LogExecuteFail(Exception exception)
         {
 #if UNITY_EDITOR
-            UnityEngin.Debug.LogWarning
+            UnityEngine.Debug.LogWarning
 #else
             Debug.WriteLine
 #endif
