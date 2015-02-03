@@ -276,31 +276,28 @@ namespace Qifun.BcpRpc
         private void LogCantHandleMessage(string messageName)
         {
 #if UNITY_EDITOR
-            UnityEngine.Debug.LogWarning
+            UnityEngine.Debug.LogWarning("Illegal RPC data, can't handle such message: " + messageName);
 #else
-            Debug.WriteLine
+            Debug.WriteLine("Illegal RPC data, can't handle such message: " + messageName);
 #endif
-            ("Illegal RPC data, can't handle such message: " + messageName);
         }
 
         private void LogNotService(string packageName)
         {
 #if UNITY_EDITOR
-            UnityEngine.Debug.LogWarning
+            UnityEngine.Debug.LogWarning("Illegal RPC data, not such service: " + packageName);
 #else
-            Debug.WriteLine
+            Debug.WriteLine ("Illegal RPC data, not such service: " + packageName);
 #endif
-            ("Illegal RPC data, not such service: " + packageName);
         }
 
         private void LogExecuteFail(Exception exception)
         {
 #if UNITY_EDITOR
-            UnityEngine.Debug.LogWarning
+            UnityEngine.Debug.LogWarning("Handle message fail: " + exception.StackTrace);
 #else
-            Debug.WriteLine
+            Debug.WriteLine("Handle message fail: " + exception.StackTrace);
 #endif
-            ("Handle message fail: " + exception.StackTrace);
         }
 
         private void OnReceived(object sender, Bcp.BcpSession.ReceivedEventArgs e)
