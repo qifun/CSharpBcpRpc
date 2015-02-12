@@ -110,16 +110,16 @@ namespace Qifun.BcpRpc
                 this.rpcSession = rpcSession;
             }
 
-            internal sealed class ResponseHandler<TResponseMessage> : IResponseHandler
+            internal sealed class ResponseHandler : IResponseHandler
             {
-                public ResponseHandler(Type responseType, Action<TResponseMessage> successCallback, Action<IExtensible> failCallback)
+                public ResponseHandler(Type responseType, Action<IExtensible> successCallback, Action<IExtensible> failCallback)
                 {
                     this.responseType = responseType;
                     this.successCallback = successCallback;
                     this.failCallback = failCallback;
                 }
 
-                private readonly Action<TResponseMessage> successCallback;
+                private readonly Action<IExtensible> successCallback;
                 private readonly Action<IExtensible> failCallback;
                 private readonly Type responseType;
 
@@ -127,7 +127,7 @@ namespace Qifun.BcpRpc
 
                 public void OnSuccess(IExtensible message)
                 {
-                    successCallback((TResponseMessage)message);
+                    successCallback(message);
                 }
 
                 public void OnFailure(IExtensible message)
@@ -136,13 +136,13 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            internal sealed class UIResponseHandler<TResponseMessage> : IResponseHandler
+            internal sealed class UIResponseHandler : IResponseHandler
             {
                 public UIResponseHandler(
                     Type responseType, 
-                    Action<TResponseMessage, Action<TResponseMessage>> successCallback,
+                    Action<IExtensible, Action<IExtensible>> successCallback,
                     Action<IExtensible, Action<IExtensible>> failCallback,
-                    Action<TResponseMessage> uiSuccessCallback,
+                    Action<IExtensible> uiSuccessCallback,
                     Action<IExtensible> uiFailCallback)
                 {
                     this.responseType = responseType;
@@ -153,16 +153,16 @@ namespace Qifun.BcpRpc
                 }
 
                 private readonly Type responseType;
-                private readonly Action<TResponseMessage, Action<TResponseMessage>> successCallback;
+                private readonly Action<IExtensible, Action<IExtensible>> successCallback;
                 private readonly Action<IExtensible, Action<IExtensible>> failCallback;
-                private readonly Action<TResponseMessage> uiSuccessCallback;
+                private readonly Action<IExtensible> uiSuccessCallback;
                 private readonly Action<IExtensible> uiFailCallback;
 
                 public Type ResponseType { get { return responseType; } }
 
                 public void OnSuccess(IExtensible message)
                 {
-                    successCallback((TResponseMessage)message, uiSuccessCallback);
+                    successCallback(message, uiSuccessCallback);
                 }
 
                 public void OnFailure(IExtensible message)
@@ -171,16 +171,14 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            public void SendRequest<TResponseMessage>(IExtensible message, Action<TResponseMessage> successCallback, Action<IExtensible> failCallback) 
-                where TResponseMessage : IExtensible 
+            public void SendRequest(IExtensible message, Type responseType, Action<IExtensible> successCallback, Action<IExtensible> failCallback) 
             {
-                Type responseType = typeof(TResponseMessage);
                 int messageId = Interlocked.Increment(ref nextMessageId);
                 lock (outgoingRpcResponseHandlerLock)
                 {
                     if(!outgoingRpcResponseHandlers.ContainsKey(messageId))
                     {
-                        var responseHandler = new ResponseHandler<TResponseMessage>(responseType, successCallback, failCallback);
+                        var responseHandler = new ResponseHandler(responseType, successCallback, failCallback);
                         outgoingRpcResponseHandlers.Add(messageId, responseHandler);
                         rpcSession.SendMessage(BcpRpc.REQUEST, messageId, message);
                     }
@@ -191,24 +189,22 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            public void SendRequest<TReqeust, TResponse>(
-                TReqeust message, 
-                Action<TResponse, Action<TResponse>> successCallback,
+            public void SendRequest(
+                IExtensible message, 
+                Type responseType,
+                Action<IExtensible, Action<IExtensible>> successCallback,
                 Action<IExtensible, Action<IExtensible>> failCallback,
-                Action<TResponse> uiSuccessCallback,
+                Action<IExtensible> uiSuccessCallback,
                 Action<IExtensible> uiFailCallback)
-                where TReqeust : IExtensible
-                where TResponse : IExtensible
             {
-                Type responseType = typeof(TResponse);
                 int messageId = Interlocked.Increment(ref nextMessageId);
                 lock(outgoingRpcResponseHandlers)
                 {
                     if(!outgoingRpcResponseHandlers.ContainsKey(messageId))
                     {
-                        var responseHandler = new UIResponseHandler<TResponse>(responseType, successCallback, failCallback, uiSuccessCallback, uiFailCallback);
+                        var responseHandler = new UIResponseHandler(responseType, successCallback, failCallback, uiSuccessCallback, uiFailCallback);
                         outgoingRpcResponseHandlers.Add(messageId, responseHandler);
-                        rpcSession.SendMessage<TReqeust>(BcpRpc.REQUEST, messageId, message);
+                        rpcSession.SendMessage(BcpRpc.REQUEST, messageId, message);
                     }
                     else
                     {
@@ -217,24 +213,22 @@ namespace Qifun.BcpRpc
                 }
             }
 
-            public void PushMessage<TPush>(TPush eventMessage)
-                where TPush : IExtensible
+            public void PushMessage(IExtensible eventMessage)
             {
                 int messageId = Interlocked.Increment(ref nextMessageId);
-                rpcSession.SendMessage<TPush>(BcpRpc.PUSHMESSAGE, messageId, eventMessage);
+                rpcSession.SendMessage(BcpRpc.PUSHMESSAGE, messageId, eventMessage);
             }
 
         }
 
-        private void SendMessage<TMessage>(int messageType, int messageId, TMessage message)
-            where TMessage : IExtensible
+        private void SendMessage(int messageType, int messageId, IExtensible message)
         {
             var messageName = message.GetType().FullName;
             var nameSize = messageName.Length;
             byte[] messageByteArray;
             using(var stream = new MemoryStream())
             {
-                Serializer.Serialize<TMessage>(stream, message);
+                Serializer.NonGeneric.Serialize(stream, message);
                 messageByteArray = stream.ToArray();
             }
             var messageSize = messageByteArray.Length;

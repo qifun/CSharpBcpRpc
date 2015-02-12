@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using Google.ProtocolBuffers;
 using System.Threading;
 using Qifun.BcpRpc.Test;
+using System.Diagnostics;
 
 namespace RpcTest
 {
@@ -195,12 +196,13 @@ namespace RpcTest
             aEvent.id = 922;
             var message = new RpcTestRequest();
             message.id = 316;
-            client.OutgoingService.SendRequest<RpcTestResponse>(message,
-                delegate(RpcTestResponse response)
+            client.OutgoingService.SendRequest(message, typeof(RpcTestResponse),
+                delegate(ProtoBuf.IExtensible response)
                 {
+                    var responseMessage = (RpcTestResponse)response;
                     lock (pingPongLock)
                     {
-                        clientResult = response.id + "";
+                        clientResult = responseMessage.id + "";
                         Monitor.Pulse(pingPongLock);
                     }
                 },
